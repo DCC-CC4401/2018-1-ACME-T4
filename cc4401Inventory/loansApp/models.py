@@ -1,6 +1,7 @@
-from mainApp.models import Action
-from articlesApp.models import Article
 from django.db import models
+
+from articlesApp.models import Article
+from mainApp.models import Action
 
 
 class Loan(Action):
