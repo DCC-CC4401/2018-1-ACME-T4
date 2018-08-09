@@ -22,6 +22,10 @@ class MainAppTestCase(TestCase):
         self.reservation = Reservation.objects.create(user=self.user, space=space, starting_date_time=timezone.now(),
                                                       ending_date_time=timezone.now())
 
+    def test_landing_page(self):
+        response = self.client.post(reverse('login_submit'), {'email': 'email@email.com', 'password': 'pass'})
+        self.assertRedirects(response, reverse('landing_articles'))
+
     def test_article_has_id(self):
         for article in self.articles:
             self.assertTrue(article.get_id() is not None)

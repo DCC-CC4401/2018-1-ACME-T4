@@ -1,7 +1,64 @@
 {% load static %}
 <head>
     <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script> <!-- Resource jQuery -->
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <style>
+
+      #feedback { font-size: 1.4em; }
+      table .ui-selecting { background: #FECA40; }
+      table .ui-selected { background: #F39814; color: white; }
+      table .ui-unselected { background: #ffffff; }
+      table { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+    </style>
+
+    <script>
+        function getDay(cotaI, cotaS){
+            if(cotaI>=1 && cotaS<=19 ){
+                return "Lunes"
+            }
+            else if(cotaI>=10 && cotaS<=38 ){
+                return "Martes"
+            }
+            else if(cotaI>=39 && cotaS<=57 ){
+                return "Miércoles"
+            }
+            else if(cotaI>=58 && cotaS<=76 ){
+                return "Jueves"
+            }
+            else if(cotaI>=77 && cotaS<=95 ){
+                return "Viernes"
+            }
+        }
+        function getHours(cotaI, cotaS){
+
+        }
+        $(function(){
+            $('table').selectable({
+                filter: 'tr',
+                selecting:function(){
+                    $('table,.ui-selected').removeClass('ui-selected')
+                },
+                stop: function() {
+                    var cotaInf= $('table tr').index($('.ui-selected')[0]);
+                    var cotaSup= $('table tr').index($('.ui-selected')[$('.ui-selected').length -1]);
+                    var dia = getDay(cotaInf, cotaSup);
+                    var result = $("#select-result").empty();
+                    $(".ui-selected",this).each(function(){
+                        var index = $('table tr').index(this);
+                        result.append("#" + (index+1));
+                    });
+                    },
+            });
+        });
+    </script>
 </head>
+<p id="feedback">
+<span>You've selected:</span> <span id="select-result">none</span>.
+</p>
 <div class="cd-schedule loading">
 	<div class="timeline" id="timeline">
 		<ul>
@@ -32,27 +89,69 @@
 	<div class="events" id="events">
 		<ul>
 			<li class="events-group">
-				<div class="top-info"><span>Lunes</span></div>
+				<div class="top-info"><span id="lunes">Lunes</span></div>
 
-				<ul>
-					{% for r in reservations.0 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
-						<a href="">
-							<em class="event-name">{{r.0}}</em>
-						</a>
-					</li>
+                    <ul>
+                          <table id= "lunes" style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="lunes1"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes3"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes4"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes5"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes6"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes7"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes8"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes9"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes10"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes11"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes12"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes13"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes14"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes15"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes16"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes17"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes18"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="lunes19"><span></span></td></tr>
+                          </table>
+                        {% for r in reservations.0 %}
 
-					{% endfor%}
+                        <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+                            <a href="">
+                                <em class="event-name">{{r.0}}</em>
+                            </a>
+                        </li>
 
-				</ul>
+                        {% endfor%}
+
+                    </ul>
 			</li>
 
 			<li class="events-group">
 				<div class="top-info"><span>Martes</span></div>
 
 				<ul>
-
+                    <table id= "martes" style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="ma1"><span></span></td></tr>
+                            <tr  style="height: 20px"><td id="ma2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="ma3"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma4"><span></span></td></tr>
+                            <tr style="height: 20px">     <td id="ma5"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma6"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma7"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma8"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma9"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="ma10"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma11"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma12"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma13"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma14"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma15"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma16"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma17"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma18"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma19"><span></span></td></tr>
+                    </table>
 					{% for r in reservations.1 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
@@ -69,6 +168,27 @@
 				<div class="top-info"><span>Miércoles</span></div>
 
 				<ul>
+                <table id=miercoles style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="mi1"><span></span></td></tr>
+                            <tr  style="height: 20px">    <td id="mi2"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="mi3"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi4"><span></span></td></tr>
+                            <tr style="height: 20px">     <td id="mi5"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi6"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi7"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi8"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi9"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="mi10"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi11"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi12"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi13"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi14"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi15"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi16"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi17"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi18"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi19"><span></span></td></tr>
+                    </table>
 					{% for r in reservations.2 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" >
@@ -85,6 +205,27 @@
 				<div class="top-info"><span>Jueves</span></div>
 
 				<ul>
+                <table id=jueves style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="j1"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j3"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j4"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j5"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j6"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j7"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j8"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j9"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j10"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j11"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j12"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j13"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j14"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j15"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j16"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j17"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j18"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j19"><span></span></td></tr>
+                          </table>
 					{% for r in reservations.3 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}">
@@ -101,6 +242,27 @@
 				<div class="top-info"><span>Viernes</span></div>
 
 				<ul>
+                <table id=viernes style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="v1"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v3"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v4"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v5"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v6"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v7"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v8"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v9"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v10"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v11"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v12"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v13"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v14"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v15"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v16"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v17"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v18"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v19"><span></span></td></tr>
+                          </table>
 					{% for r in reservations.4 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
@@ -158,8 +320,10 @@
 	</div>
 
 	<div class="cover-layer"></div>
-</div> <!-- .cd-schedule -->
-<script src="{% static 'js/modernizr.js' %}"></script>
-<script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
 
-<script src="{% static 'js/main.js' %}"></script> <!-- Resource jQuery -->
+</div> <!-- .cd-schedule -->
+
+
+
+
+
