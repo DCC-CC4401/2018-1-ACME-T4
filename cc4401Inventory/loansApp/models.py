@@ -1,8 +1,16 @@
 from django.db import models
+from mainApp.models import User
+from reservationsApp.models import ReservaArticulo
+from reservationsApp.models import ReservaEspacio
 
-from articlesApp.models import Article
-from mainApp.models import Action
+class PrestamoArticulo(models.Model):
+    reserva = models.ForeignKey(ReservaArticulo, on_delete=models.CASCADE)
+    administrador = models.ForeignKey(User, on_delete=models.CASCADE)
+    ESTADOS_PRES = ((1, 'Vigente'), (2, 'Caducado'), (3, 'Perdido'))
+    estado_prestamo = models.IntegerField(choices=ESTADOS_PRES, default=1)
 
-
-class Loan(Action):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+class PrestamoEspacio(models.Model):
+    reserva = models.ForeignKey(ReservaEspacio, on_delete=models.CASCADE)
+    administrador = models.ForeignKey(User, on_delete=models.CASCADE)
+    ESTADOS_PRES = ((1, 'Vigente'), (2, 'Caducado'), (3, 'Perdido'))
+    estado_prestamo = models.IntegerField(choices=ESTADOS_PRES, default=1)
