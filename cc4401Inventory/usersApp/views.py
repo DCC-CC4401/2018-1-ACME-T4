@@ -74,7 +74,7 @@ def user_data(request, user_id):
     try:
         user = User.objects.get(id=user_id)
         reservations = Reservation.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
-        loans = Loan.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
+        loans = Loan.objects.filter(reservation__user=user_id).order_by('-reservation__starting_date_time')[:10]
         context = {
             'user': user,
             'reservations': reservations,
