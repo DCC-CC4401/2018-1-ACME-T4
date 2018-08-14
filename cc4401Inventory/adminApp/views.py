@@ -1,16 +1,13 @@
-from datetime import datetime, timedelta, date
-
-import pytz
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.utils.timezone import localtime
-
-from articlesApp.models import Article
-from loansApp.models import Loan
-from mainApp.models import User
+from django.contrib.auth.decorators import login_required
 from reservationsApp.models import Reservation
+from loansApp.models import Loan
+from articlesApp.models import Article
 from spacesApp.models import Space
-
+from mainApp.models import User
+from datetime import datetime, timedelta, date
+import pytz
+from django.utils.timezone import localtime
 
 @login_required
 def user_panel(request):
@@ -22,7 +19,6 @@ def user_panel(request):
         'users': users
     }
     return render(request, 'user_panel.html', context)
-
 
 @login_required
 def items_panel(request):
@@ -36,7 +32,6 @@ def items_panel(request):
         'spaces': spaces
     }
     return render(request, 'items_panel.html', context)
-
 
 @login_required
 def actions_panel(request):
@@ -52,26 +47,23 @@ def actions_panel(request):
 
     colores = {'A': 'rgba(0,153,0,0.7)',
                'P': 'rgba(51,51,204,0.7)',
-               'R': 'rgba(153, 0, 0,0.7)'}
+                'R': 'rgba(153, 0, 0,0.7)'}
 
     reservations = Reservation.objects.filter(state='P').order_by('starting_date_time')
-    current_week_reservations = Reservation.objects.filter(starting_date_time__week=current_week)
+    current_week_reservations = Reservation.objects.filter(starting_date_time__week = current_week)
     actual_date = datetime.now(tz=pytz.utc)
     try:
         if request.method == "GET":
-            if request.GET["filter"] == 'vigentes':
-                loans = Loan.objects.filter(reservation__ending_date_time__gt=actual_date, state='V').order_by(
-                    'reservation__starting_date_time')
-            elif request.GET["filter"] == 'caducados':
-                loans = Loan.objects.filter(reservation__ending_date_time__lt=actual_date, state='C').order_by(
-                    'reservation__starting_date_time')
-            elif request.GET["filter"] == 'perdidos':
-                loans = Loan.objects.filter(reservation__ending_date_time__lt=actual_date, state='P').order_by(
-                    'reservation__starting_date_time')
+            if request.GET["filter"]=='vigentes':
+                loans = Loan.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
+            elif request.GET["filter"]=='caducados':
+                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='P').order_by('starting_date_time')
+            elif request.GET["filter"]=='perdidos':
+                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='L').order_by('starting_date_time')
             else:
-                loans = Loan.objects.all().order_by('reservation__starting_date_time')
+                loans = Loan.objects.all().order_by('starting_date_time')
     except:
-        loans = Loan.objects.all().order_by('reservation__starting_date_time')
+        loans = Loan.objects.all().order_by('starting_date_time')
 
     res_list = []
     for i in range(5):
@@ -98,6 +90,7 @@ def actions_panel(request):
     monday = (
         (datetime.strptime(current_date, "%Y-%m-%d") - timedelta(days=delta)).strftime("%d/%m/%Y"))
 
+
     context = {
         'reservations_query': reservations,
         'loans': loans,
@@ -116,7 +109,7 @@ def modify_reservations(request):
     if request.method == "POST":
 
         accept = True if (request.POST["accept"] == "1") else False
-        reservations = Reservation.objects.filter(id__in=request.POST.getlist("selected"))
+        reservations = Reservation.objects.filter(id__in=request.POST["selected"])
         if accept:
             for reservation in reservations:
                 reservation.state = 'A'
