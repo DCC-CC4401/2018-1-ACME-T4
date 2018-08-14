@@ -77,6 +77,8 @@ def actions_panel(request):
     for i in range(5):
         res_list.append(list())
     for r in current_week_reservations:
+        if r.type == 'A':
+            continue
         reserv = list()
         reserv.append(r.space.name)
         reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))
