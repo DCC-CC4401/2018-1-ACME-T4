@@ -1,8 +1,13 @@
 from django.db import models
 
-from articlesApp.models import Article
-from mainApp.models import Action
+from reservationsApp.models import Reservation
 
 
-class Loan(Action):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+class Loan(models.Model):
+    STATES = (
+        ('V', 'Vigente'),
+        ('C', 'Caducado'),
+        ('P', 'Perdido')
+    )
+    state = models.CharField('Estado', choices=STATES, max_length=1, default='V')
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, default=1)
