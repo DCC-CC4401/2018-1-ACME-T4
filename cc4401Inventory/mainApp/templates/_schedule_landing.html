@@ -7,61 +7,296 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <style>
+        #feedback { font-size: 1.4em; }
+        table .ui-selecting { background: #FECA40; }
+        table .ui-selected { background: #F39814; color: white; }
+        table .ui-unselected { background: #ffffff; }
+        table { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+        .popup {
+            position: fixed;
+            z-index: 1000;
+            background-color: white;
+            cursor: pointer;
+            border-color: black;
+            border: 1px;
+            display: none;
+        }
+        .popup .popupform {
+            z-index: 1001;
+            width: 500px;
+            background-color: white;
+            color: black;
+            text-align: center;
+            border: 3px solid #000000;
+            position: center;
+            padding-left: 2%;
+            padding-right: 2%;
 
-      #feedback { font-size: 1.4em; }
-      table .ui-selecting { background: #FECA40; }
-      table .ui-selected { background: #F39814; color: white; }
-      table .ui-unselected { background: #ffffff; }
-      table { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+        }
+
+
+
     </style>
 
     <script>
+        var hi="9:00";
+        var hf="18:30";
+
+
         function getDay(cotaI, cotaS){
-            if(cotaI>=1 && cotaS<=19 ){
-                return "Lunes"
+            var day = $("#day").empty();
+            if(cotaI>=1 && cotaS<=18 ){
+                day.append("Lunes " + "{{ monday }}");
+                return "Lunes";
             }
-            else if(cotaI>=10 && cotaS<=38 ){
-                return "Martes"
+            else if(cotaI>=19 && cotaS<=36 ){
+                day.append("Martes "+ "{{ tuesday }}");
+                return "Martes";
             }
-            else if(cotaI>=39 && cotaS<=57 ){
-                return "Miércoles"
+            else if(cotaI>=37 && cotaS<=54 ){
+                day.append("Miércoles "+ "{{ wednesday }}");
+                return "Miércoles";
             }
-            else if(cotaI>=58 && cotaS<=76 ){
-                return "Jueves"
+            else if(cotaI>=55 && cotaS<=72 ){
+                day.append("Jueves "+ "{{ thursday }}");
+                return "Jueves";
             }
-            else if(cotaI>=77 && cotaS<=95 ){
-                return "Viernes"
+            else if(cotaI>=73 && cotaS<=90 ){
+                day.append("Viernes "+ "{{ friday }}");
+                return "Viernes";
             }
         }
-        function getHours(cotaI, cotaS){
+        function setHours(cotaI, cotaS){
+            var day=getDay(cotaI,cotaS);
+            var cI=cotaI;
+            var cS=cotaS;
+            if(day.localeCompare("Lunes")==0){
+
+            }
+            else if(day.localeCompare("Martes")==0){
+                cI=cotaI-18;
+                cS=cotaS-18;
+
+            }
+            else if(day.localeCompare("Miércoles")==0){
+                cI=cotaI-18-18;
+                cS=cotaS-18-18;
+            }
+            else if(day.localeCompare("Jueves")==0){
+                cI=cotaI-18-18-18;
+                cS=cotaS-18-18-18;
+            }
+            else if(day.localeCompare("Viernes")==0){
+                cI=cotaI-18-18-18-18;
+                cS=cotaS-18-18-18-18;
+            }
+            switch (cI){
+                case 1:
+                    hi= "9:00";
+                    break;
+                case 2:
+                     hi= "9:30";
+                     break;
+                case 3:
+                     hi= "10:00";
+                     break;
+                case 4:
+                     hi= "10:30";
+                     break;
+                case 5:
+                     hi= "11:00";
+                     break;
+                case 6:
+                     hi= "11:30";
+                     break;
+                case 7:
+                     hi= "12:00";
+                     break;
+                case 8:
+                     hi= "12:30";
+                     break;
+                case 9:
+                     hi= "13:00";
+                     break;
+                case 10:
+                     hi= "13:30";
+                     break;
+                case 11:
+                     hi= "14:00";
+                     break;
+                case 12:
+                     hi= "14:30";
+                     break;
+                case 13:
+                     hi= "15:00";
+                     break;
+                case 14:
+                     hi= "15:30";
+                     break;
+                case 15:
+                     hi= "16:00";
+                     break;
+                case 16:
+                     hi= "16:30";
+                     break;
+                case 17:
+                     hi= "17:00";
+                     break;
+                case 18:
+                     hi= "17:30";
+                     break;
+            }
+            switch (cS){
+                case 1:
+                    hf= "9:30";
+                     break;
+                case 2:
+                    hf= "10:00";
+                     break;
+                case 3:
+                    hf= "10:30";
+                     break;
+                case 4:
+                    hf= "11:00";
+                     break;
+                case 5:
+                    hf= "11:30";
+                     break;
+                case 6:
+                    hf= "12:00";
+                     break;
+                case 7:
+                    hf= "12:30";
+                     break;
+                case 8:
+                    hf= "13:00";
+                     break;
+                case 9:
+                    hf= "13:30";
+                     break;
+                case 10:
+                    hf= "14:00";
+                     break;
+                case 11:
+                    hf= "14:30";
+                     break;
+                case 12:
+                    hf= "15:00";
+                     break;
+                case 13:
+                    hf= "15:30";
+                     break;
+                case 14:
+                    hf= "16:00";
+                     break;
+                case 15:
+                    hf= "16:30";
+                     break;
+                case 16:
+                    hf= "17:00";
+                     break;
+                case 17:
+                    hf= "17:30";
+                     break;
+                case 18:
+                    hf= "18:00";
+                     break;
+            }
 
         }
         $(function(){
             $('table').selectable({
                 filter: 'tr',
+                start: function () {
+                    popdown();
+                },
                 selecting:function(){
                     $('table,.ui-selected').removeClass('ui-selected')
                 },
                 stop: function() {
-                    var cotaInf= $('table tr').index($('.ui-selected')[0]);
-                    var cotaSup= $('table tr').index($('.ui-selected')[$('.ui-selected').length -1]);
+                    var cotaInf= $('table tr').index($('.ui-selected')[0]) +1;
+                    var cotaSup= $('table tr').index($('.ui-selected')[$('.ui-selected').length -1]) +1;
                     var dia = getDay(cotaInf, cotaSup);
+                    setHours(cotaInf,cotaSup);
                     var result = $("#select-result").empty();
                     $(".ui-selected",this).each(function(){
                         var index = $('table tr').index(this);
                         result.append("#" + (index+1));
+
                     });
+                    var horai= document.getElementById("hora_inicial");
+                    horai.value= hi;
+                    var horaf= document.getElementById("hora_final");
+                    horaf.value= hf;
+                    var date= document.getElementById("fecha");
+                    date.value= dia;
+
+                    var horas= $("#horas").empty();
+                    horas.append("Desde: "+ hi + " hasta " + hf);
+                    result.append(dia + " desde "+hi +" hasta " +hf);
+                    popup();
                     },
             });
         });
+        function popup() {
+            var popup = document.getElementById("popup");
+            popup.style.display="block";
+        }
+        function popdown() {
+             var popup = document.getElementById("popup");
+            popup.style.display="none";
+        }
+        window.onload= function () {
+            var x =document.getElementById("close");
+            console.log(x);
+            x.onclick = function(){
+                popdown();
+            }
+        }
+
+
     </script>
 </head>
 <p id="feedback">
 <span>You've selected:</span> <span id="select-result">none</span>.
 </p>
-<div class="cd-schedule loading">
-	<div class="timeline" id="timeline">
-		<ul>
+<div class="row justify-content-center" >
+    <div class="popup" style="align:center" id="popup">
+        <form class="popupform" method="post" action="{% url space_request %}">
+            <span class="close" id="close">&times;</span>
+            <div class="row justify-content-center align-items-center" style="height: 80px; margin:0%">
+                <h3>Reserva de espacios</h3>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px">
+                <select class="form-control" id="select_espacio" name="espacio" style="width: 70%">
+                    <option>Espacio 1</option>
+                    <option>Espacio 2</option>
+                    <option>Espacio 3</option>
+                </select>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px">
+                <span>Estás reservando para:
+                    <b id="day">
+                    </b>
+                </span>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px" id="horas">
+
+            </div>
+            <input type="hidden" name="hora_inicial" id="hora_inicial">
+            <input type="hidden" name="hora_final" id="hora_final">
+            <input type="hidden" name="fecha" id="fecha">
+            <div class="row justify-content-center align-items-center"style="height: 80px">
+                <input type="submit" value="Reservar">
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="cd-schedule loading" >
+	<div class="timeline" id="timeline" >
+		<ul style="height: 383.8px">
 			<li><span>09:00</span></li>
 			<li><span>09:30</span></li>
 			<li><span>10:00</span></li>
@@ -86,33 +321,33 @@
 	<div id="line-container" class="line-container">
 	<div id="line" class="clock"></div><div class="message" id="message"></div>
 		</div>
-	<div class="events" id="events">
-		<ul>
-			<li class="events-group">
+	<div class="events" id="events" style="height: 100%">
+		<ul style="height: 100%">
+			<li class="events-group" style="height: 100%">
 				<div class="top-info"><span id="lunes">Lunes</span></div>
 
 
-                    <ul>
+                    <ul style="height: 100%" >
                           <table id= "lunes" style="height: 100%;width: 100%">
-                            <tr style="height: 20px"><td id="lunes1"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes2"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes3"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes4"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes5"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes6"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes7"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes8"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes9"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes10"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes11"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes12"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes13"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes14"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes15"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes16"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes17"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes18"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="lunes19"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes1"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes2"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes3"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes4"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes5"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes6"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes7"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes8"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes9"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes10"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes11"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes12"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes13"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes14"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes15"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes16"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes17"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes18"><span></span></td></tr>
+
                           </table>
                         {% for r in reservations.0 %}
 
@@ -127,10 +362,10 @@
                     </ul>
 			</li>
 
-			<li class="events-group">
+			<li class="events-group" style="height: 100%">
 				<div class="top-info"><span>Martes</span></div>
 
-				<ul>
+				<ul style="height: 100%">
                     <table id= "martes" style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="ma1"><span></span></td></tr>
                             <tr  style="height: 20px"><td id="ma2"><span></span></td></tr>
@@ -150,7 +385,7 @@
                             <tr style="height: 20px">    <td id="ma16"><span></span></td></tr>
                             <tr style="height: 20px">    <td id="ma17"><span></span></td></tr>
                             <tr style="height: 20px">    <td id="ma18"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma19"><span></span></td></tr>
+
                     </table>
 					{% for r in reservations.1 %}
 
@@ -164,10 +399,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group">
+			<li class="events-group" style="height: 100%">
 				<div class="top-info"><span>Miércoles</span></div>
 
-				<ul>
+				<ul style="height: 100%">
                 <table id=miercoles style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="mi1"><span></span></td></tr>
                             <tr  style="height: 20px">    <td id="mi2"><span></span></td></tr>
@@ -187,7 +422,6 @@
                             <tr style="height: 20px">    <td id="mi16"><span></span></td></tr>
                             <tr style="height: 20px">    <td id="mi17"><span></span></td></tr>
                             <tr style="height: 20px">    <td id="mi18"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi19"><span></span></td></tr>
                     </table>
 					{% for r in reservations.2 %}
 
@@ -201,10 +435,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group">
+			<li class="events-group" style="height: 100%">
 				<div class="top-info"><span>Jueves</span></div>
 
-				<ul>
+				<ul style="height: 100%">
                 <table id=jueves style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="j1"><span></span></td></tr>
                             <tr style="height: 20px"><td id="j2"><span></span></td></tr>
@@ -224,7 +458,6 @@
                             <tr style="height: 20px"><td id="j16"><span></span></td></tr>
                             <tr style="height: 20px"><td id="j17"><span></span></td></tr>
                             <tr style="height: 20px"><td id="j18"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j19"><span></span></td></tr>
                           </table>
 					{% for r in reservations.3 %}
 
@@ -238,10 +471,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group">
+			<li class="events-group" style="height: 100%">
 				<div class="top-info"><span>Viernes</span></div>
 
-				<ul>
+				<ul style="height: 100%">
                 <table id=viernes style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="v1"><span></span></td></tr>
                             <tr style="height: 20px"><td id="v2"><span></span></td></tr>
@@ -261,7 +494,6 @@
                             <tr style="height: 20px"><td id="v16"><span></span></td></tr>
                             <tr style="height: 20px"><td id="v17"><span></span></td></tr>
                             <tr style="height: 20px"><td id="v18"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v19"><span></span></td></tr>
                           </table>
 					{% for r in reservations.4 %}
 

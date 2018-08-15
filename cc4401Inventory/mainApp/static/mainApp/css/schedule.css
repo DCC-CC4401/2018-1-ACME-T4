@@ -105,7 +105,11 @@ Main Components
   }
   .cd-schedule .timeline li {
     position: relative;
-    height: 20px;
+    height: 20.2px;
+  }
+  .cd-schedule .timeline ul {
+    position: relative;
+    height: 100%;
   }
   .cd-schedule .timeline li::after {
     /* this is used to create the table horizontal lines */
@@ -147,10 +151,6 @@ Main Components
   z-index: 1;
 }
 
-.cd-schedule .events .events-group {
-  /*margin-bottom: 30px;*/
-}
-
 .cd-schedule .events .top-info {
   width: 100%;
   padding: 0 5%;
@@ -174,6 +174,7 @@ Main Components
   -webkit-overflow-scrolling: touch;
 }
 
+
 .cd-schedule .events .events-group > ul::after {
   /* never visible - used to add a right padding to .events-group > ul */
   display: inline-block;
@@ -183,6 +184,7 @@ Main Components
   opacity: 0;
   color: transparent;
 }
+
 
 .cd-schedule .events .single-event {
     border:1px solid black;
@@ -305,6 +307,7 @@ Main Components
     /* 60px is the .timeline element width */
     width: calc(100% - 60px);
     margin-left: 60px;
+    height: 100%
   }
 }
 

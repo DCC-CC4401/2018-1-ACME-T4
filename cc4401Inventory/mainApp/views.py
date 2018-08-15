@@ -49,10 +49,21 @@ def landing_spaces(request, date=None):
 
     delta = (datetime.datetime.strptime(current_date, "%Y-%m-%d").isocalendar()[2])-1
     monday = ((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime("%d/%m/%Y"))
+    lunes  = ((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime("%d/%m/%Y"))
+    martes= ((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-1)).strftime("%d/%m/%Y"))
+    miercoles=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-2)).strftime("%d/%m/%Y"))
+    jueves=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-3)).strftime("%d/%m/%Y"))
+    viernes=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-4)).strftime("%d/%m/%Y"))
     context = {'reservations' : res_list,
                'current_date' : current_date,
                'controls' : move_controls,
-               'actual_monday' : monday}
+               'actual_monday' : monday,
+               'monday': lunes,
+               'tuesday': martes,
+               'wednesday': miercoles,
+               'thursday': jueves,
+               'friday': viernes}
+
     return render(request, 'espacios.html', context)
 
 
@@ -84,3 +95,5 @@ def search(request):
 
         products = None if (request.GET['query'] == "") else articles
         return landing_search(request, products)
+
+
