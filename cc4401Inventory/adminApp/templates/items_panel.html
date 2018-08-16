@@ -99,10 +99,19 @@
               <div class="modal-body">
                   <form action="{% url 'create_item' %}" method="post" enctype="multipart/form-data" id="itemform">
                     {% csrf_token %}
-                      Nombre: <input type="text" name="itemname"><br>
-                      Descripcion: <textarea rows="4" cols="50" name="itemdesc" form="itemform"></textarea><br>
-                      Imagen: <input type="file" name="itemimage">
-                    <button type="submit">Upload</button>
+                      <div class="form-group">
+                          <label for="itemname">Nombre:</label>
+                          <input type="text" class="form-control" id="itemname">
+                      </div>
+                      <div class="form-group">
+                          <label for="itemdesc">Descripción:</label>
+                          <textarea class="form-control" id="itemdesc" rows="3"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <label for="itemimage">Imagen:</label>
+                          <input type="file" class="form-control-file" id="itemimage">
+                      </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
                   </form>
               </div>
             </div>
