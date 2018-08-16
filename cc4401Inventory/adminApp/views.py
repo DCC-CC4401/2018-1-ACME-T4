@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from reservationsApp.models import Reservation
@@ -5,6 +6,7 @@ from loansApp.models import Loan
 from articlesApp.models import Article
 from spacesApp.models import Space
 from mainApp.models import User
+from mainApp.models import Item
 from datetime import datetime, timedelta, date
 import pytz
 from django.utils.timezone import localtime
@@ -120,3 +122,12 @@ def modify_reservations(request):
                 reservation.save()
 
     return redirect('/admin/actions-panel')
+
+def create_item(request):
+    if request.method=="POST":
+        nombre=request.POST['itemname']
+        descripcion=request.POST['itemdesc']
+        image=request.POST['itemimage']
+        item=Item.objects.createItem(nombre,descripcion,image)
+        messages.success(request, 'Item ' + item.name + ' creado')
+        return redirect('/adimn/items_panel')

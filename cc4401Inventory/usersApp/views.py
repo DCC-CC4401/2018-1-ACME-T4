@@ -24,8 +24,12 @@ def login_submit(request):
     context = {'error_message': ''}
 
     if user is not None:
-        login(request, user)
-        return redirect('/articles/')
+        if user.is_superuser:
+            login(request, user)
+            return redirect('/admin/')
+        else:
+            login(request, user)
+            return redirect('/articles/')
     else:
         messages.warning(request, 'La contraseña ingresada no es correcta o el usuario no existe')
         return redirect('/user/login')
