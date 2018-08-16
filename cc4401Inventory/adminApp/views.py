@@ -6,7 +6,7 @@ from loansApp.models import Loan
 from articlesApp.models import Article
 from spacesApp.models import Space
 from mainApp.models import User
-from mainApp.models import Item
+from articlesApp.models import Article
 from datetime import datetime, timedelta, date
 import pytz
 from django.utils.timezone import localtime
@@ -127,7 +127,8 @@ def create_item(request):
     if request.method=="POST":
         nombre=request.POST['itemname']
         descripcion=request.POST['itemdesc']
-        image=request.POST['itemimage']
-        item=Item.objects.createItem(nombre,descripcion,image)
-        messages.success(request, 'Item ' + item.name + ' creado')
-        return redirect('/adimn/items_panel')
+        image=request.FILES['itemimage']
+        article=Article(name=nombre,description=descripcion,image=image, state='D')
+        article.save()
+        messages.success(request, 'Item n°' + str(article.id) + ' creado')
+        return redirect('/admin/items-panel')

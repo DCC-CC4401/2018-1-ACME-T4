@@ -76,11 +76,6 @@ class Item(models.Model):
     description = models.TextField('Descripción', blank=True)
     image = models.ImageField('Imagen del articulo', upload_to='static/img/items', blank=True)
 
-    def createItem(self, name, description, image):
-        item=self.model(name, description, image)
-        item.save(using=self._db)
-        return item
-
     class Meta:
         abstract = True
 
