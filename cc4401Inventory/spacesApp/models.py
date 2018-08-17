@@ -1,4 +1,5 @@
 from django.db import models
+
 from mainApp.models import Item
 
 
@@ -9,3 +10,4 @@ class Space(Item):
         ('R', 'En reparación')
     )
     state = models.CharField(max_length=1, choices=STATES)
+    is_quincho = models.BooleanField(default=False)
