@@ -2,8 +2,12 @@ from django.shortcuts import render
 from django.utils.timezone import localtime
 import datetime
 from articlesApp.models import Article
+from spacesApp.models import Space
+
+from django.contrib import messages
 from reservationsApp.models import Reservation
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 @login_required
@@ -54,6 +58,7 @@ def landing_spaces(request, date=None):
     miercoles=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-2)).strftime("%d/%m/%Y"))
     jueves=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-3)).strftime("%d/%m/%Y"))
     viernes=((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta-4)).strftime("%d/%m/%Y"))
+    spaces = Space.objects.all()
     context = {'reservations' : res_list,
                'current_date' : current_date,
                'controls' : move_controls,
@@ -62,7 +67,8 @@ def landing_spaces(request, date=None):
                'tuesday': martes,
                'wednesday': miercoles,
                'thursday': jueves,
-               'friday': viernes}
+               'friday': viernes,
+               'espacios': spaces}
 
     return render(request, 'espacios.html', context)
 
@@ -96,4 +102,23 @@ def search(request):
         products = None if (request.GET['query'] == "") else articles
         return landing_search(request, products)
 
+@login_required
+def space_request(request):
+    if request.method == 'POST':
+        space=Space.objects.get(name= request.POST['espacio'])              #  request.POST['espacio']  ==nombre del espacio
+        hora_inicial= request.POST['hora_inicial']# hora en string
+        hora_final=request.POST['hora_final']# hora en string
+        fecha= request.POST['fecha'] #fecha en string
+        string_inicio=fecha + " " + hora_inicial
+        start_date_time= datetime.datetime.strptime(string_inicio, '%d/%m/%Y %H:%M')
+        string_fin=fecha + " " + hora_final
+        ending_date_time= datetime.datetime.strptime(string_fin, '%d/%m/%Y %H:%M')
 
+        if start_date_time < datetime.now() + datetime.timedelta(hours=1):
+                    messages.warning(request, 'Los pedidos deben ser hechos al menos con una hora de anticipación.')
+
+        reservation= Reservation(space=space, starting_date_time=start_date_time, ending_date_time=ending_date_time,
+                                 user=request.user)
+        reservation.save()
+        messages.success(request, 'Pedido realizado con éxito')
+    return redirect('landing_spaces')

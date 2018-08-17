@@ -41,28 +41,34 @@
     <script>
         var hi="9:00";
         var hf="18:30";
+        var fecha;
 
 
         function getDay(cotaI, cotaS){
             var day = $("#day").empty();
             if(cotaI>=1 && cotaS<=18 ){
                 day.append("Lunes " + "{{ monday }}");
+                fecha=  "{{ monday }}";
                 return "Lunes";
             }
             else if(cotaI>=19 && cotaS<=36 ){
                 day.append("Martes "+ "{{ tuesday }}");
+                fecha=  "{{ tuesday }}";
                 return "Martes";
             }
             else if(cotaI>=37 && cotaS<=54 ){
                 day.append("Miércoles "+ "{{ wednesday }}");
+                fecha=  "{{ wednesday }}";
                 return "Miércoles";
             }
             else if(cotaI>=55 && cotaS<=72 ){
                 day.append("Jueves "+ "{{ thursday }}");
+                fecha=  "{{ thursday }}";
                 return "Jueves";
             }
             else if(cotaI>=73 && cotaS<=90 ){
                 day.append("Viernes "+ "{{ friday }}");
+                fecha=  "{{ friday }}";
                 return "Viernes";
             }
         }
@@ -205,7 +211,7 @@
 
         }
         $(function(){
-            $('table').selectable({
+            $('.selectable').selectable({
                 filter: 'tr',
                 start: function () {
                     popdown();
@@ -229,13 +235,13 @@
                     var horaf= document.getElementById("hora_final");
                     horaf.value= hf;
                     var date= document.getElementById("fecha");
-                    date.value= dia;
+                    date.value= fecha;
 
                     var horas= $("#horas").empty();
-                    horas.append("Desde: "+ hi + " hasta " + hf);
-                    result.append(dia + " desde "+hi +" hasta " +hf);
+                    horas.append("Desde: "+ hi + " hasta " + hf); //horas que aparecen en formulario
+                    result.append(dia + " desde "+hi +" hasta " +hf); //texto que aparece arriba de la grilla
                     popup();
-                    },
+                    }
             });
         });
         function popup() {
@@ -262,13 +268,17 @@
 </p>
 <div class="row justify-content-center" >
     <div class="popup" style="align:center" id="popup">
-        <form class="popupform" method="post" action="{% url space_request %}">
+        <form class="popupform" method="post" action="{% url 'space_request' %}">
+            {% csrf_token%}
             <span class="close" id="close">&times;</span>
             <div class="row justify-content-center align-items-center" style="height: 80px; margin:0%">
                 <h3>Reserva de espacios</h3>
             </div>
             <div class="row justify-content-center align-items-center" style="height: 80px">
                 <select class="form-control" id="select_espacio" name="espacio" style="width: 70%">
+                    {% for s in espacios %}
+                        <option> {{s.name}} </option><!--poner nombre del espacio aqui-->
+                    {% endfor %}
                     <option>Espacio 1</option>
                     <option>Espacio 2</option>
                     <option>Espacio 3</option>
@@ -328,7 +338,7 @@
 
 
                     <ul style="height: 100%" >
-                          <table id= "lunes" style="height: 100%;width: 100%">
+                          <table class="selectable" id= "lunes" style="height: 100%;width: 100%">
                             <tr style="height: 20.19px"><td id="lunes1"><span></span></td></tr>
                             <tr style="height: 20.19px"><td id="lunes2"><span></span></td></tr>
                             <tr style="height: 20.19px"><td id="lunes3"><span></span></td></tr>
@@ -366,7 +376,7 @@
 				<div class="top-info"><span>Martes</span></div>
 
 				<ul style="height: 100%">
-                    <table id= "martes" style="height: 100%;width: 100%">
+                    <table class="selectable" id= "martes" style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="ma1"><span></span></td></tr>
                             <tr  style="height: 20px"><td id="ma2"><span></span></td></tr>
                             <tr style="height: 20px"><td id="ma3"><span></span></td></tr>
@@ -403,7 +413,7 @@
 				<div class="top-info"><span>Miércoles</span></div>
 
 				<ul style="height: 100%">
-                <table id=miercoles style="height: 100%;width: 100%">
+                <table  class="selectable" id=miercoles style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="mi1"><span></span></td></tr>
                             <tr  style="height: 20px">    <td id="mi2"><span></span></td></tr>
                             <tr style="height: 20px">   <td id="mi3"><span></span></td></tr>
@@ -439,7 +449,7 @@
 				<div class="top-info"><span>Jueves</span></div>
 
 				<ul style="height: 100%">
-                <table id=jueves style="height: 100%;width: 100%">
+                <table class="selectable" id=jueves style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="j1"><span></span></td></tr>
                             <tr style="height: 20px"><td id="j2"><span></span></td></tr>
                             <tr style="height: 20px"><td id="j3"><span></span></td></tr>
@@ -475,7 +485,7 @@
 				<div class="top-info"><span>Viernes</span></div>
 
 				<ul style="height: 100%">
-                <table id=viernes style="height: 100%;width: 100%">
+                <table class="selectable" id=viernes style="height: 100%;width: 100%">
                             <tr style="height: 20px"><td id="v1"><span></span></td></tr>
                             <tr style="height: 20px"><td id="v2"><span></span></td></tr>
                             <tr style="height: 20px"><td id="v3"><span></span></td></tr>
