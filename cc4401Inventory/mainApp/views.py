@@ -3,11 +3,12 @@ from django.utils.timezone import localtime
 import datetime
 from articlesApp.models import Article
 from spacesApp.models import Space
-
+import adminApp.urls
 from django.contrib import messages
 from reservationsApp.models import Reservation
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+
 
 
 @login_required
@@ -122,3 +123,11 @@ def space_request(request):
         reservation.save()
         messages.success(request, 'Pedido realizado con éxito')
     return redirect('landing_spaces')
+
+@login_required
+def check_user(request):
+    user=request.user
+    if user.is_staff:
+        return redirect("landing-panel")
+    else:
+        return redirect ('landing')
