@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
-from django.core.mail import send_mail
 from django.db import models
+from django.core.mail import send_mail
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
@@ -45,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to='static/img/avatars/', null=True, blank=True)
     enabled = models.BooleanField('Habilitado', default=True)
     rut = models.CharField('RUT', max_length=12, unique=True, null=True)
+    role = models.IntegerField('Tipo', default=0)
     is_staff = models.BooleanField(_('staff status'), default=False)
 
     objects = UserManager()
@@ -74,6 +75,21 @@ class Item(models.Model):
     name = models.CharField('Nombre', max_length=40)
     description = models.TextField('Descripción', blank=True)
     image = models.ImageField('Imagen del articulo', upload_to='static/img/items', blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Action(models.Model):
+    STATES = (
+        ('A', 'Aceptado'),
+        ('R', 'Rechazado'),
+        ('P', 'Pendiente')
+    )
+    starting_date_time = models.DateTimeField()
+    ending_date_time = models.DateTimeField()
+    state = models.CharField('Estado', choices=STATES, max_length=1, default='P')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
