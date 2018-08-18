@@ -50,10 +50,10 @@
         </form>
       </div>
 
-
       <div class="col-md-6 admin-table-container">
+
         <h1>Préstamos</h1>
-      <div class="row">
+          <div class="row">
           <form action="" method="get">
               <input type="hidden" name="date" value="{{ current_date }}">
           <div class="btn-group" role="group" aria-label="Basic example" style="margin: 10px auto;">
@@ -63,15 +63,18 @@
             <button name = "filter" value ="perdidos" type="submit" class="btn btn-secondary">Perdidos</button>
             </div>
           </form>
-      </div>
+        </div>
+         <form action="{% url 'change_loans' %}" method="post">
+         {% csrf_token %}
         <table id="loans-table" class="table table-striped">
           <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Nombre del Espacio</th>
+            <th scope="col">Nombre del Artículo</th>
             <th scope="col">Usuario</th>
             <th scope="col">Fecha de Prestamo</th>
-              <th scope="col">Estado</th>
+            <th scope="col">Estado</th>
+             <th scope="col">Seleccionar</th>
           </tr>
           </thead>
           <tbody>
@@ -82,10 +85,27 @@
             <td>{{ loan.user.get_full_name }}</td>
             <td>{{ loan.starting_date_time }}</td>
           <td>{{ loan.get_state_display }}</td>
+          <td>
+             <div class="custom-control custom-checkbox">
+                <input name="loans" type="checkbox"
+                    class="custom-control-input checkbox"
+                    id="checkbox-loan-{{ loan.id }}"
+                    value="{{ loan.id }}"/>
+                      <label class="custom-control-label float-right"
+                          for="checkbox-loan-{{ loan.id }}"></label>
+             </div>
+          </td>
           </tr>
           {% endfor %}
           </tbody>
         </table>
+           <select class="custom-select custom-select-lg mb-1" name="state">
+              <option selected>Cambiar a...</option>
+              <option value="D">Recibido</option>
+              <option value="L">Perdido</option>
+            </select>
+         <button type="submit" class="btn btn-primary" style="margin: 10px auto;">Cambiar Estado Seleccionados</button>
+         </form>
       </div>
     </div>
   </div>

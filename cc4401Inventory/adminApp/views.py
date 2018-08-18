@@ -132,3 +132,21 @@ def create_item(request):
         article.save()
         messages.success(request, 'Item n°' + str(article.id) + ' creado')
         return redirect('/admin/items-panel')
+
+def delete_item(request):
+    if request.method=="POST":
+        itemid=request.POST['itemid']
+        item=Article.objects.get(id=itemid)
+        item.delete()
+        return redirect('/admin/items-panel')
+
+def changeloans(request):
+    if request.method=="POST":
+        newstate=request.POST['state']
+        loansid=request.POST.getlist('loans')
+        for loanid in loansid:
+            loan=Loan.objects.get(id=loanid)
+            loan.article.state=newstate
+            loan.article.save()
+        return redirect('/admin/actions-panel')
+
