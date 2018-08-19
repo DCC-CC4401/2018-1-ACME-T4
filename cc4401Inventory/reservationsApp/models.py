@@ -5,4 +5,4 @@ from spacesApp.models import Space
 
 
 class Reservation(Action):
-    space = models.ForeignKey(Space, on_delete=models.CASCADE)
+    space = models.ForeignKey(Space, on_delete=models.CASCADE,related_name='espacio')
