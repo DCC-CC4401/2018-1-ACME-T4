@@ -39,56 +39,56 @@
     </style>
 
     <script>
-        var hi="9:00";
-        var hf="18:30";
-        var fecha;
+       // var hi="9:00";
+        //var hf="18:30";
+       // var fecha;
 
 
-        function getDay(cotaI, cotaS){
-            var day = $("#day").empty();
-            if(cotaI>=1 && cotaS<=18 ){
-                day.append("Lunes " + "{{ monday }}");
-                fecha=  "{{ monday }}";
-                return "Lunes";
-            }
-            else if(cotaI>=19 && cotaS<=36 ){
-                day.append("Martes "+ "{{ tuesday }}");
-                fecha=  "{{ tuesday }}";
-                return "Martes";
-            }
-            else if(cotaI>=37 && cotaS<=54 ){
-                day.append("Miércoles "+ "{{ wednesday }}");
-                fecha=  "{{ wednesday }}";
-                return "Miércoles";
-            }
-            else if(cotaI>=55 && cotaS<=72 ){
-                day.append("Jueves "+ "{{ thursday }}");
-                fecha=  "{{ thursday }}";
-                return "Jueves";
-            }
-            else if(cotaI>=73 && cotaS<=90 ){
-                day.append("Viernes "+ "{{ friday }}");
-                fecha=  "{{ friday }}";
-                return "Viernes";
-            }
-        }
-        function setHours(cotaI, cotaS){
-            var day=getDay(cotaI,cotaS);
-            var cI=cotaI;
-            var cS=cotaS;
-            if(day.localeCompare("Lunes")==0){
+        //function getDay(cotaI, cotaS){
+          //  var day = $("#day").empty();
+//            if(cotaI>=1 && cotaS<=18 ){
+//                day.append("Lunes " + "{{ monday }}");
+//                fecha=  "{{ monday }}";
+//                return "Lunes";
+//            }
+//            else if(cotaI>=19 && cotaS<=36 ){
+//                day.append("Martes "+ "{{ tuesday }}");
+//                fecha=  "{{ tuesday }}";
+//                return "Martes";
+//            }
+//            else if(cotaI>=37 && cotaS<=54 ){
+//                day.append("Miércoles "+ "{{ wednesday }}");
+//                fecha=  "{{ wednesday }}";
+//                return "Miércoles";
+//            }
+//            else if(cotaI>=55 && cotaS<=72 ){
+//                day.append("Jueves "+ "{{ thursday }}");
+//                fecha=  "{{ thursday }}";
+//                return "Jueves";
+//            }
+//            else if(cotaI>=73 && cotaS<=90 ){
+//                 day.append("Viernes "+ "{{ friday }}");
+//                 fecha=  "{{ friday }}";
+//                 return "Viernes";
+//             }
+//         }
+//         function setHours(cotaI, cotaS){
+//             var day=getDay(cotaI,cotaS);
+//             var cI=cotaI;
+//             var cS=cotaS;
+//             if(day.localeCompare("Lunes")==0){
+//
+//             }
+//             else if(day.localeCompare("Martes")==0){
+//                 cI=cotaI-18;
+//                 cS=cotaS-18;
 
-            }
-            else if(day.localeCompare("Martes")==0){
-                cI=cotaI-18;
-                cS=cotaS-18;
-
-            }
-            else if(day.localeCompare("Miércoles")==0){
-                cI=cotaI-18-18;
-                cS=cotaS-18-18;
-            }
-            else if(day.localeCompare("Jueves")==0){
+//             }
+//             else if(day.localeCompare("Miércoles")==0){
+//                 cI=cotaI-18-18;
+//                 cS=cotaS-18-18;
+//             }
+/*            else if(day.localeCompare("Jueves")==0){
                 cI=cotaI-18-18-18;
                 cS=cotaS-18-18-18;
             }
@@ -258,14 +258,14 @@
             x.onclick = function(){
                 popdown();
             }
-        }
+        }*/
 
 
     </script>
 </head>
-<p id="feedback">
+<!--<p id="feedback">
 <span>You've selected:</span> <span id="select-result">none</span>.
-</p>
+</p>-->
 <div class="row justify-content-center" >
     <div class="popup" style="align:center" id="popup">
         <form class="popupform" method="post" action="{% url 'space_request' %}">
@@ -537,7 +537,7 @@
 
 	</div>
 
-        <div class="row" style="width: 828px;margin-left:60px;position:absolute;top:432px;padding-top: 10px;padding-bottom: 10px">
+      <!--  <div class="row" style="width: 828px;margin-left:60px;position:absolute;top:432px;padding-top: 10px;padding-bottom: 10px">
         <form action="{% url 'landing_spaces' %}" method="post" style="width:100%">
         {% csrf_token%}
         <div class="row"style="padding-bottom: 10px">
@@ -551,7 +551,7 @@
         </div>
         <input type="submit" value="Filtrar">
         </form>
-        </div>
+        </div>-->
 
 
 	<div class="event-modal">
