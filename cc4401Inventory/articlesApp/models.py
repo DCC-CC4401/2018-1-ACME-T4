@@ -1,6 +1,5 @@
-from django.db import models
-
 from mainApp.models import Item
+from django.db import models
 
 
 class Article(Item):

@@ -1,6 +1,5 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.utils import timezone
+from django.test import TestCase
+
 
 from articlesApp.models import Article
 from loansApp.models import Loan
@@ -50,3 +49,4 @@ class MainAppTestCase(TestCase):
                                                       'fecha_fin': date.isoformat()})
         loans = Loan.objects.filter(user=self.user)
         self.assertEquals(1, len(loans))
+
