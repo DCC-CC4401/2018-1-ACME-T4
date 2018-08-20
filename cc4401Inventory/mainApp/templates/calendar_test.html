@@ -8,8 +8,8 @@
 
     <style>
         #feedback { font-size: 1.4em; }
-        table .ui-selecting { background: #FECA40; }
-        table .ui-selected { background: #F39814; color: white; }
+        table .ui-selecting { background: #79bcb5; }
+        table .ui-selected { background: #79bcb5; color: white; }
         table .ui-unselected { background: #ffffff; }
         table { list-style-type: none; margin: 0; padding: 0; width: 60%; }
         .popup {
@@ -39,56 +39,56 @@
     </style>
 
     <script>
-       // var hi="9:00";
-        //var hf="18:30";
-       // var fecha;
+        var hi="9:00";
+        var hf="18:30";
+        var fecha;
 
 
-        //function getDay(cotaI, cotaS){
-          //  var day = $("#day").empty();
-//            if(cotaI>=1 && cotaS<=18 ){
-//                day.append("Lunes " + "{{ monday }}");
-//                fecha=  "{{ monday }}";
-//                return "Lunes";
-//            }
-//            else if(cotaI>=19 && cotaS<=36 ){
-//                day.append("Martes "+ "{{ tuesday }}");
-//                fecha=  "{{ tuesday }}";
-//                return "Martes";
-//            }
-//            else if(cotaI>=37 && cotaS<=54 ){
-//                day.append("Miércoles "+ "{{ wednesday }}");
-//                fecha=  "{{ wednesday }}";
-//                return "Miércoles";
-//            }
-//            else if(cotaI>=55 && cotaS<=72 ){
-//                day.append("Jueves "+ "{{ thursday }}");
-//                fecha=  "{{ thursday }}";
-//                return "Jueves";
-//            }
-//            else if(cotaI>=73 && cotaS<=90 ){
-//                 day.append("Viernes "+ "{{ friday }}");
-//                 fecha=  "{{ friday }}";
-//                 return "Viernes";
-//             }
-//         }
-//         function setHours(cotaI, cotaS){
-//             var day=getDay(cotaI,cotaS);
-//             var cI=cotaI;
-//             var cS=cotaS;
-//             if(day.localeCompare("Lunes")==0){
-//
-//             }
-//             else if(day.localeCompare("Martes")==0){
-//                 cI=cotaI-18;
-//                 cS=cotaS-18;
+        function getDay(cotaI, cotaS){
+            var day = $("#day").empty();
+            if(cotaI>=1 && cotaS<=18 ){
+                day.append("Lunes " + "{{ monday }}");
+                fecha=  "{{ monday }}";
+                return "Lunes";
+            }
+            else if(cotaI>=19 && cotaS<=36 ){
+                day.append("Martes "+ "{{ tuesday }}");
+                fecha=  "{{ tuesday }}";
+                return "Martes";
+            }
+            else if(cotaI>=37 && cotaS<=54 ){
+                day.append("Miércoles "+ "{{ wednesday }}");
+                fecha=  "{{ wednesday }}";
+                return "Miércoles";
+            }
+            else if(cotaI>=55 && cotaS<=72 ){
+                day.append("Jueves "+ "{{ thursday }}");
+                fecha=  "{{ thursday }}";
+                return "Jueves";
+            }
+            else if(cotaI>=73 && cotaS<=90 ){
+                day.append("Viernes "+ "{{ friday }}");
+                fecha=  "{{ friday }}";
+                return "Viernes";
+            }
+        }
+        function setHours(cotaI, cotaS){
+            var day=getDay(cotaI,cotaS);
+            var cI=cotaI;
+            var cS=cotaS;
+            if(day.localeCompare("Lunes")==0){
 
-//             }
-//             else if(day.localeCompare("Miércoles")==0){
-//                 cI=cotaI-18-18;
-//                 cS=cotaS-18-18;
-//             }
-/*            else if(day.localeCompare("Jueves")==0){
+            }
+            else if(day.localeCompare("Martes")==0){
+                cI=cotaI-18;
+                cS=cotaS-18;
+
+            }
+            else if(day.localeCompare("Miércoles")==0){
+                cI=cotaI-18-18;
+                cS=cotaS-18-18;
+            }
+            else if(day.localeCompare("Jueves")==0){
                 cI=cotaI-18-18-18;
                 cS=cotaS-18-18-18;
             }
@@ -258,7 +258,7 @@
             x.onclick = function(){
                 popdown();
             }
-        }*/
+        }
 
 
     </script>
@@ -520,38 +520,71 @@
 
 
 	<div class="week-select" id="week-select">
-		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 200px; font-size: 18px">
-			<form action="" method="get" class="selectform">
-				<a href="?date={{controls.0}}" role="button"><i class="fas fa-angle-double-left"></i></a>
+		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 600px; font-size: 18px">
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit" name="date"   value="{{controls.0}}" style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-double-left"></i></button>
 			</form>
-			<form action="" method="get" class="selectform">
-				<a href="?date={{controls.1}}" role="button"><i class="fas fa-angle-left"></i></a>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                   {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit" name="date"   value="{{controls.1}}"style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-left"></i></button>
 			</form>
-			<form action="" method="get" class="selectform">
-				<a href="?date={{controls.2}}" role="button"><i class="fas fa-angle-right"></i></a>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit"name="date"value="{{controls.2}}"style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height:20px"><i class="fas fa-angle-right"></i></button>
 			</form>
-			<form action="" method="get" class="selectform">
-				<a href="?date={{controls.3}}" role="button"><i class="fas fa-angle-double-right"></i></a>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit"name="date"value="{{controls.3}}" style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height: 20px"><i class="fas fa-angle-double-right"></i></button>
 			</form>
 		</div>
 
 	</div>
 
-      <!--  <div class="row" style="width: 828px;margin-left:60px;position:absolute;top:432px;padding-top: 10px;padding-bottom: 10px">
+        <div class="row" style="width: 828px;margin-left:60px;position:absolute;top:432px;padding-top: 10px;padding-bottom: 10px">
         <form action="{% url 'landing_spaces' %}" method="post" style="width:100%">
         {% csrf_token%}
         <div class="row"style="padding-bottom: 10px">
             {% for s in espacios %}
-                <div class="col-3 " style="margin: 0%">
+                <div class="col-3 " style="margin-top:5px;font-size: larger;">
                     <input type="hidden" name="{{ s.name }}" value=False>
-                    <input type="checkbox" id="espacio{{ s.id }}" name="{{ s.name }}" value="{{ s.name }}">
+                    <input type="checkbox" id="espacio{{ s.id }}" name="{{ s.name }}" value="{{ s.name }}"style="height:15px;width: 15px">
                     <label for="espacio{{ s.id }}">{{ s.name }}</label>
                 </div>
             {% endfor %}
+             <input type="hidden" name="date" value="{{ current_date }}">
         </div>
-        <input type="submit" value="Filtrar">
+            <button type="submit" value="Filtrar" class="btn btn-success">Filtrar</button>
         </form>
-        </div>-->
+        </div>
 
 
 	<div class="event-modal">

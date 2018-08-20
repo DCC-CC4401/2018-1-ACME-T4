@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="{% static 'articlesApp/css/article.css' %}">
   <link rel="stylesheet" href="{% static 'usersApp/css/user_profile.css' %}">
   <meta charset="UTF-8">
+	<script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -32,7 +33,6 @@
     {% block body %}
     {% endblock %}
   </div>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   {% bootstrap_javascript %}
 </body>
 </html>
