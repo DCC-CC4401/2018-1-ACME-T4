@@ -166,3 +166,12 @@ def space_edit_description(request, space_id):
         a.save()
 
     return redirect('/space/' + str(space_id) + '/edit')
+
+@login_required
+def space_edit_capacity(request, space_id):
+    if request.method == "POST":
+        a = Space.objects.get(id=space_id)
+        a.capacity = request.POST["capacity"]
+        a.save()
+
+    return redirect('/space/' + str(space_id) + '/edit')
