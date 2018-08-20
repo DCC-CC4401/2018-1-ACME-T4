@@ -1,3 +1,4 @@
+import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -25,6 +26,13 @@ def login_submit(request):
 
     if user is not None:
         login(request, user)
+
+        # Se rechazan reservas al quincho, estas caducan 24 horas antes de su fecha de inicio
+        query = Reservation.objects.filter(user=user, type='S', state='P', space__is_quincho=True)
+        for reservation in query:
+            if reservation.starting_date_time >= datetime.datetime.now() - datetime.timedelta(hours=24):
+                reservation.state = 'R'
+                reservation.save()
         return redirect('/articles/')
     else:
         messages.warning(request, 'La contraseña ingresada no es correcta o el usuario no existe')
@@ -75,6 +83,7 @@ def user_data(request, user_id):
         user = User.objects.get(id=user_id)
         reservations = Reservation.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
         loans = Loan.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
+
         context = {
             'user': user,
             'reservations': reservations,

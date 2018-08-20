@@ -65,7 +65,11 @@
                                                    type="checkbox" value="{{ reservation.id }}">
                                         {% endif %}
                                         <label for="reservation-{{ reservation.id }}">
-                                            {{ reservation.space.name }} <span
+                                            {% if reservation.type == 'A' %}
+                                                {{ reservation.article.name }}
+                                            {% elif resevation.type == 'S' %}
+                                                {{ reservation.space.name }}
+                                            {% endif %}<span
                                                 class="badge badge-pill badge-light">{{ reservation.get_state_display }}</span>
                                         </label>
                                       <br>
@@ -86,25 +90,50 @@
                                                  role="tabpanel"
                                                  aria-labelledby="v-pills-{{ reservation.pk }}-tab">
 
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h2 class="mb-1">{{ reservation.space.name }}</h2>
-                                            <medium><strong>{{ reservation.starting_date_time }}</strong></medium>
-                                        </div>
-                                        <medium class="text-muted">{{ reservation.get_state_display }}</medium>
+                                        {% if reservation.type == 'A' %}
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h2 class="mb-1">{{ reservation.article.name }}</h2>
+                                                <medium><strong>{{ reservation.starting_date_time }}</strong></medium>
+                                            </div>
+                                            <medium class="text-muted">{{ reservation.get_state_display }}</medium>
+                                            <br>
+                                            <a href="/reservation/{{ reservation.id }}">Ir a la Reserva</a>
 
-                                        <!-- Imagen de las reservas-->
-                                        {% if reservation.space.image %}
-                                            <img src=" {% static reservation.space.image.url %}" class="img-fluid"
+                                            <!-- Imagen de las reservas-->
+                                            {% if reservation.article.image %}
+                                                <img src=" {% static reservation.article.image.url %}" class="img-fluid"
 
-                                                 alt="Foto"/>
-                                        {% else %}
-                                            <img class="card-img-top img-fluid"
-                                                 src="{% static 'img/items/default_article.jpg' %}"
-                                                 alt="Card image cap">
+                                                     alt="Foto"/>
+                                            {% else %}
+                                                <img class="card-img-top img-fluid"
+                                                     src="{% static 'img/items/default_article.jpg' %}"
+                                                     alt="Card image cap">
+                                            {% endif %}
+
+                                            <p>{{ reservation.article.description }}</p>
+                                        {% elif reservation.type == 'S' %}
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h2 class="mb-1">{{ reservation.space.name }}</h2>
+                                                <medium><strong>{{ reservation.starting_date_time }}</strong></medium>
+                                            </div>
+                                            <medium class="text-muted">{{ reservation.get_state_display }}</medium>
+                                            <br>
+                                            <a href="/reservation/{{ reservation.id }}">Ir a la Reserva</a>
+
+                                            <!-- Imagen de las reservas-->
+                                            {% if reservation.space.image %}
+                                                <img src=" {% static reservation.space.image.url %}" class="img-fluid"
+
+                                                     alt="Foto"/>
+                                            {% else %}
+                                                <img class="card-img-top img-fluid"
+                                                     src="{% static 'img/items/default_article.jpg' %}"
+                                                     alt="Card image cap">
+                                            {% endif %}
+
+                                            <p>{{ reservation.space.description }}</p>
                                         {% endif %}
 
-
-                                        <p>{{ reservation.space.description }}</p>
 
                                         <div class="reservation-timeline">
                                             <div class="container_timeline right">
@@ -168,7 +197,11 @@
                                                id="v-pills-{{ loan.pk }}-tab" data-toggle="pill"
                                                href="#v-pills-{{ loan.pk }}"
                                                role="tab" aria-controls="v-pills-{{ loan.pk }}" aria-selected="false">
-                                                {{ loan.article.name }} <span
+                                                {% if loan.type == 'A' %}
+                                                    {{ loan.article.name }}
+                                                {% elif loan.type == 'S' %}
+                                                    {{ loan.space.name }}
+                                                {% endif %}<span
                                                     class="badge badge-pill badge-light">{{ loan.get_state_display }}</span></a>
                                         {% endfor %}
                                     </div>
@@ -188,26 +221,58 @@
                                                          role="tabpanel"
                                                          aria-labelledby="v-pills-{{ loan.pk }}-tab">
 
-                                                        <div class="d-flex w-100 justify-content-between">
-                                                            <h2 class="mb-1">{{ loan.article.name }}</h2>
-                                                            <medium><strong>{{ loan.starting_date_time }}</strong>
-                                                            </medium>
-                                                        </div>
-                                                        <medium class="text-muted">{{ loan.get_state_display }}</medium>
+                                                        {% if loan.type == 'A' %}
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <h2 class="mb-1">{{ loan.article.name }}</h2>
+                                                                <medium><strong>{{ loan.starting_date_time }}</strong>
+                                                                </medium>
+                                                            </div>
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <medium class="text-muted">{{ loan.get_state_display }}</medium>
+                                                                <p class="text-info">Debes entregar este artículo antes de:
+                                                                    {{ loan.ending_date_time }}</p>
+                                                            </div>
 
-                                                        <!-- Imagen de los préstamos-->
-                                                        {% if loan.article.image %}
-                                                            <img src=" {% static loan.article.image.url %}"
-                                                                 class="img-fluid"
-                                                                 alt="Foto"
-                                                                 style="height: 900px"/>
-                                                        {% else %}
-                                                            <img class="card-img-top img-fluid"
-                                                                 src="{% static 'img/items/default_article.jpg' %}"
-                                                                 alt="Card image cap">
+                                                            <!-- Imagen de los préstamos-->
+                                                            {% if loan.article.image %}
+                                                                <img src=" {% static loan.article.image.url %}"
+                                                                     class="img-fluid"
+                                                                     alt="Foto"
+                                                                     style="height: 900px"/>
+                                                            {% else %}
+                                                                <img class="card-img-top img-fluid"
+                                                                     src="{% static 'img/items/default_article.jpg' %}"
+                                                                     alt="Card image cap">
+                                                            {% endif %}
+
+                                                            <p>{{ loan.article.description }}</p>
+                                                        {% elif loan.type == 'S' %}
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <h2 class="mb-1">{{ loan.space.name }}</h2>
+                                                                <medium><strong>{{ loan.starting_date_time }}</strong>
+                                                                </medium>
+                                                            </div>
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <medium class="text-muted">{{ loan.get_state_display }}</medium>
+                                                                <p class="text-info">Debes desocupar este espacio antes de:
+                                                                    {{ loan.ending_date_time }}</p>
+                                                            </div>
+
+                                                            <!-- Imagen de los préstamos-->
+                                                            {% if loan.space.image %}
+                                                                <img src=" {% static loan.space.image.url %}"
+                                                                     class="img-fluid"
+                                                                     alt="Foto"
+                                                                     style="height: 900px"/>
+                                                            {% else %}
+                                                                <img class="card-img-top img-fluid"
+                                                                     src="{% static 'img/items/default_article.jpg' %}"
+                                                                     alt="Card image cap">
+                                                            {% endif %}
+
+                                                            <p>{{ loan.space.description }}</p>
                                                         {% endif %}
 
-                                                        <p>{{ loan.article.description }}</p>
 
                                                         <div class="reservation-timeline">
                                                             <div class="container_timeline right">
@@ -253,9 +318,5 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-    </div>
-    </div>
 {% endblock %}

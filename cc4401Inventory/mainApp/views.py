@@ -34,6 +34,8 @@ def landing_spaces(request, date=None):
     for i in range(5):
         res_list.append(list())
     for r in reservations:
+        if r.type == 'A':
+            continue
         reserv = []
         reserv.append(r.space.name)
         reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))

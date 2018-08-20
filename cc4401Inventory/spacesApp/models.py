@@ -9,5 +9,5 @@ class Space(Item):
         ('P', 'En préstamo'),
         ('R', 'En reparación')
     )
-    state = models.CharField(max_length=1, choices=STATES)
+    state = models.CharField(max_length=1, choices=STATES, default='D')
     is_quincho = models.BooleanField(default=False)
