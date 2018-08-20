@@ -10,3 +10,4 @@ class Article(Item):
         ('L', 'Perdido')
     )
     state = models.CharField(max_length=1, choices=STATES)
+

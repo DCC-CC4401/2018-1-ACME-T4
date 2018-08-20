@@ -26,8 +26,12 @@ def login_submit(request):
     context = {'error_message': ''}
 
     if user is not None:
-        login(request, user)
-        return redirect('/articles/')
+        if user.is_superuser:
+            login(request, user)
+            return redirect('/admin/')
+        else:
+            login(request, user)
+            return redirect('/articles/')
     else:
         messages.warning(request, 'La contraseña ingresada no es correcta o el usuario no existe')
         return redirect('/user/login')
@@ -63,6 +67,8 @@ def signup_submit(request):
             user = User.objects.create_user(first_name=first_name, email=email, password=password, rut = rut)
             login(request, user)
             messages.success(request, 'Bienvenid@, ' + user.first_name + ' ya puedes comenzar a hacer reservas :)')
+            if user.is_superuser:
+                return redirect('/admin/')
             return redirect('/articles/')
 
 

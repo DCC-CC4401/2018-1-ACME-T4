@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from reservationsApp.models import Reservation
@@ -5,6 +6,7 @@ from loansApp.models import Loan
 from articlesApp.models import Article
 from spacesApp.models import Space
 from mainApp.models import User
+from articlesApp.models import Article
 from datetime import datetime, timedelta, date
 import pytz
 from django.utils.timezone import localtime
@@ -120,3 +122,31 @@ def modify_reservations(request):
                 reservation.save()
 
     return redirect('/admin/actions-panel')
+
+def create_item(request):
+    if request.method=="POST":
+        nombre=request.POST['itemname']
+        descripcion=request.POST['itemdesc']
+        image=request.FILES['itemimage']
+        article=Article(name=nombre,description=descripcion,image=image, state='D')
+        article.save()
+        messages.success(request, 'Item n°' + str(article.id) + ' creado')
+        return redirect('/admin/items-panel')
+
+def delete_item(request):
+    if request.method=="POST":
+        itemid=request.POST['itemid']
+        item=Article.objects.get(id=itemid)
+        item.delete()
+        return redirect('/admin/items-panel')
+
+def changeloans(request):
+    if request.method=="POST":
+        newstate=request.POST['state']
+        loansid=request.POST.getlist('loans')
+        for loanid in loansid:
+            loan=Loan.objects.get(id=loanid)
+            loan.article.state=newstate
+            loan.article.save()
+        return redirect('/admin/actions-panel')
+
