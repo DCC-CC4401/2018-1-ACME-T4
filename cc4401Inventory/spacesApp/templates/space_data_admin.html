@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block title %}
-    Editando artículo: {{ space.name }}
+    Editando espacio: {{ space.name }}
 {% endblock %}
 
 
@@ -138,7 +138,9 @@
                 </div>
             </div>
         </div>
-
+    <div class="col-4 ml-auto">
+        <a class="btn btn-primary" href="/space/{{ space.id }}" role="button">Volver</a>
+    </div>
 
     </div>
 {% endblock %}
