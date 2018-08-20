@@ -576,7 +576,7 @@
             {% for s in espacios %}
                 <div class="col-3 " style="margin-top:5px;font-size: larger;">
                     <input type="hidden" name="{{ s.name }}" value=False>
-                    <input type="checkbox" id="espacio{{ s.id }}" name="{{ s.name }}" value="{{ s.name }} "style="height:15px;width: 15px">
+                    <input type="checkbox" id="espacio{{ s.id }}" name="{{ s.name }}" value="{{ s.name }}"style="height:15px;width: 15px">
                     <label for="espacio{{ s.id }}">{{ s.name }}</label>
                 </div>
             {% endfor %}
