@@ -13,36 +13,68 @@ from django.contrib import messages
 
 @login_required
 def space_data(request, space_id):
-    try:
-        space = Space.objects.get(id=space_id)
+    if not request.user.is_staff:
+        try:
+            space = Space.objects.get(id=space_id)
 
-        last_reservations = Reservation.objects.filter(space=space,
-                                         ending_date_time__lt=datetime.now(tz=pytz.utc)
-                                         ).order_by('-ending_date_time')[:10]
+            last_loans = Reservation.objects.filter(space=space,
+                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                             ).order_by('-ending_date_time')[:10]
 
-        reservation_list = list()
-        for reservation in last_reservations:
+            loan_list = list()
+            for loan in last_loans:
 
-            starting_day = reservation.starting_date_time.strftime("%d-%m-%Y")
-            ending_day = reservation.ending_date_time.strftime("%d-%m-%Y")
-            starting_hour = reservation.starting_date_time.strftime("%H:%M")
-            ending_hour = reservation.ending_date_time.strftime("%H:%M")
+                starting_day = loan.starting_date_time.strftime("%d-%m-%Y")
+                ending_day = loan.ending_date_time.strftime("%d-%m-%Y")
+                starting_hour = loan.starting_date_time.strftime("%H:%M")
+                ending_hour = loan.ending_date_time.strftime("%H:%M")
 
-            if starting_day == ending_day:
-                reservation_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
-            else:
-                reservation_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
+                if starting_day == ending_day:
+                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                else:
+                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
 
 
-        context = {
-            'space': space,
-            'last_reservations': reservation_list
-        }
+            context = {
+                'space': space,
+                'last_loans': loan_list
+            }
 
-        return render(request, 'space_data.html', context)
-    except Exception as e:
-        print(e)
-        return redirect('/')
+            return render(request, 'space_data.html', context)
+        except Exception as e:
+            print(e)
+            return redirect('/')
+    else:
+        try:
+            space = Space.objects.get(id=space_id)
+
+            last_loans = Reservation.objects.filter(space=space,
+                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                             ).order_by('-ending_date_time')[:10]
+
+            loan_list = list()
+            for loan in last_loans:
+
+                starting_day = loan.starting_date_time.strftime("%d-%m-%Y")
+                ending_day = loan.ending_date_time.strftime("%d-%m-%Y")
+                starting_hour = loan.starting_date_time.strftime("%H:%M")
+                ending_hour = loan.ending_date_time.strftime("%H:%M")
+
+                if starting_day == ending_day:
+                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                else:
+                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
+
+
+            context = {
+                'space': space,
+                'last_loans': loan_list
+            }
+
+            return render(request, 'space_admin.html', context)
+        except Exception as e:
+            print(e)
+            return redirect('/')
 
 def verificar_horario_habil(horario):
     if horario.isocalendar()[2] > 5:
@@ -131,6 +163,15 @@ def space_edit_description(request, space_id):
     if request.method == "POST":
         a = Space.objects.get(id=space_id)
         a.description = request.POST["description"]
+        a.save()
+
+    return redirect('/space/' + str(space_id) + '/edit')
+
+@login_required
+def space_edit_capacity(request, space_id):
+    if request.method == "POST":
+        a = Space.objects.get(id=space_id)
+        a.capacity = request.POST["capacity"]
         a.save()
 
     return redirect('/space/' + str(space_id) + '/edit')

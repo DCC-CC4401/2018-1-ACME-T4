@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block title %}
-    Editando artículo: {{ space.name }}
+    Editando espacio: {{ space.name }}
 {% endblock %}
 
 
@@ -42,9 +42,12 @@
                     </button></div>
                 <div style="margin-bottom: 30px">
                     <div style ="border:1px dashed darkgrey;border-radius: 5px;padding: 5px;height:120px;width:calc(100% - 60px); display: inline-block; overflow: scroll;">{{ space.description }}</div>
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editDescription" style="margin-bottom:1.6rem">
+                         <i class="fas fa-edit"></i>
+                    </button>
                     <br/>
                     <div style ="border:1px dashed darkgrey;border-radius: 5px;padding: 5px;height:120px;width:calc(100% - 60px); display: inline-block; overflow: scroll;">{{ space.capacity }}</div>
-                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editDescription" style="margin-bottom:1.6rem">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editCapacity" style="margin-bottom:1.6rem">
                         <i class="fas fa-edit"></i>
                     </button>
                 </div>
@@ -66,7 +69,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editNameLabel">Editar Nombre del Artículo</h5>
+                        <h5 class="modal-title" id="editNameLabel">Editar Nombre del espacio</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -92,7 +95,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editImageLabel">Editar Imagen del Artículo</h5>
+                        <h5 class="modal-title" id="editImageLabel">Editar Imagen del espacio</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -117,7 +120,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editDescriptionLabel">Editar Nombre del Artículo</h5>
+                        <h5 class="modal-title" id="editDescriptionLabel">Editar Nombre del espacio</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -126,7 +129,7 @@
                         {% csrf_token %}
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="textarea1">Ingrese Descripción del artículo</label>
+                                <label for="textarea1">Ingrese Descripción del espacio</label>
                                 <textarea name="description" class="form-control" id="textarea1" rows="4">{{ space.description }}</textarea>
                             </div>
                         </div>
@@ -138,7 +141,35 @@
                 </div>
             </div>
         </div>
-
+            <!-- Capacidad -->
+        <div class="modal fade" id="editCapacity" tabindex="-1" role="dialog" aria-labelledby="editCapacitynLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCapacityLabel">Editar Nombre del espacio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="edit_capacity" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="textarea1">Ingrese Capacidad del espacio</label>
+                                <textarea name="description" class="form-control" id="textarea1" rows="4">{{ space.capacity }}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div class="col-4 ml-auto">
+        <a class="btn btn-primary" href="/space/{{ space.id }}" role="button">Volver</a>
+    </div>
 
     </div>
 {% endblock %}

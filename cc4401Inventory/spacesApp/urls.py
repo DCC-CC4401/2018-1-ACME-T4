@@ -8,5 +8,6 @@ urlpatterns = [
     path('<int:space_id>/edit_name', views.space_edit_name, name='space_edit_name'),
     path('<int:space_id>/edit_image', views.space_edit_image, name='space_edit_image'),
     path('<int:space_id>/edit_description', views.space_edit_description, name='space_edit_description'),
+    path('<int:space_id>/edit_capacity', views.space_edit_capacity, name='space_edit_capacity'),
     path('request', views.space_request, name='space_request'),
 ]
