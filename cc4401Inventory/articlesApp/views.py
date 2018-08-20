@@ -13,36 +13,68 @@ from django.contrib import messages
 
 @login_required
 def article_data(request, article_id):
-    try:
-        article = Article.objects.get(id=article_id)
+    if not request.user.is_staff:
+        try:
+            article = Article.objects.get(id=article_id)
 
-        last_loans = Loan.objects.filter(article=article,
-                                         ending_date_time__lt=datetime.now(tz=pytz.utc)
-                                         ).order_by('-ending_date_time')[:10]
+            last_loans = Loan.objects.filter(article=article,
+                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                             ).order_by('-ending_date_time')[:10]
 
-        loan_list = list()
-        for loan in last_loans:
+            loan_list = list()
+            for loan in last_loans:
 
-            starting_day = loan.starting_date_time.strftime("%d-%m-%Y")
-            ending_day = loan.ending_date_time.strftime("%d-%m-%Y")
-            starting_hour = loan.starting_date_time.strftime("%H:%M")
-            ending_hour = loan.ending_date_time.strftime("%H:%M")
+                starting_day = loan.starting_date_time.strftime("%d-%m-%Y")
+                ending_day = loan.ending_date_time.strftime("%d-%m-%Y")
+                starting_hour = loan.starting_date_time.strftime("%H:%M")
+                ending_hour = loan.ending_date_time.strftime("%H:%M")
 
-            if starting_day == ending_day:
-                loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
-            else:
-                loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
+                if starting_day == ending_day:
+                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                else:
+                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
 
 
-        context = {
-            'article': article,
-            'last_loans': loan_list
-        }
+            context = {
+                'article': article,
+                'last_loans': loan_list
+            }
 
-        return render(request, 'article_data.html', context)
-    except Exception as e:
-        print(e)
-        return redirect('/')
+            return render(request, 'article_data.html', context)
+        except Exception as e:
+            print(e)
+            return redirect('/')
+    else:
+        try:
+            article = Article.objects.get(id=article_id)
+
+            last_loans = Loan.objects.filter(article=article,
+                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                             ).order_by('-ending_date_time')[:10]
+
+            loan_list = list()
+            for loan in last_loans:
+
+                starting_day = loan.starting_date_time.strftime("%d-%m-%Y")
+                ending_day = loan.ending_date_time.strftime("%d-%m-%Y")
+                starting_hour = loan.starting_date_time.strftime("%H:%M")
+                ending_hour = loan.ending_date_time.strftime("%H:%M")
+
+                if starting_day == ending_day:
+                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                else:
+                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
+
+
+            context = {
+                'article': article,
+                'last_loans': loan_list
+            }
+
+            return render(request, 'article_admin.html', context)
+        except Exception as e:
+            print(e)
+            return redirect('/')
 
 def verificar_horario_habil(horario):
     if horario.isocalendar()[2] > 5:
