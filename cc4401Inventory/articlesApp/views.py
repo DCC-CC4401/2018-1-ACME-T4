@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 
 from articlesApp.models import Article
 from loansApp.models import Loan
+from reservationsApp.models import Reservation
 
 
 @login_required
@@ -104,9 +105,10 @@ def article_request(request):
                 elif not verificar_horario_habil(start_date_time) and not verificar_horario_habil(end_date_time):
                     messages.warning(request, 'Los pedidos deben ser hechos en horario hábil.')
                 else:
-                    loan = Loan(article=article, starting_date_time=start_date_time, ending_date_time=end_date_time,
-                                user=request.user, type='A')
-                    loan.save()
+                    reservation = Reservation(article=article, starting_date_time=start_date_time,
+                                              ending_date_time=end_date_time,
+                                              user=request.user, type='A')
+                    reservation.save()
                     messages.success(request, 'Pedido realizado con éxito')
             except Exception as e:
                 messages.warning(request, 'Ingrese una fecha y hora válida.')
