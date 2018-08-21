@@ -1,0 +1,593 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script> <!-- Resource jQuery -->
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <style>
+        #feedback { font-size: 1.4em; }
+        table .ui-selecting { background: #79bcb5; }
+        table .ui-selected { background: #79bcb5; color: white; }
+        table .ui-unselected { background: #ffffff; }
+        table { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+        .popup {
+            position: fixed;
+            z-index: 1000;
+            background-color: white;
+            z-index: 1001;
+            width: 500px;
+            background-color: white;
+            color: black;
+            text-align: center;
+            border: 3px solid #000000;
+            position: center;
+            padding-left: 2%;
+            padding-right: 2%;
+
+        }
+
+
+
+    </style>
+
+    <script>
+        var hi="9:00";
+        var hf="18:30";
+        var fecha;
+
+
+        function getDay(cotaI, cotaS){
+            var day = $("#day").empty();
+            if(cotaI>=1 && cotaS<=18 ){
+                day.append("Lunes " + "{{ monday }}");
+                fecha=  "{{ monday }}";
+                return "Lunes";
+            }
+            else if(cotaI>=19 && cotaS<=36 ){
+                day.append("Martes "+ "{{ tuesday }}");
+                fecha=  "{{ tuesday }}";
+                return "Martes";
+            }
+            else if(cotaI>=37 && cotaS<=54 ){
+                day.append("Miércoles "+ "{{ wednesday }}");
+                fecha=  "{{ wednesday }}";
+                return "Miércoles";
+            }
+            else if(cotaI>=55 && cotaS<=72 ){
+                day.append("Jueves "+ "{{ thursday }}");
+                fecha=  "{{ thursday }}";
+                return "Jueves";
+            }
+            else if(cotaI>=73 && cotaS<=90 ){
+                day.append("Viernes "+ "{{ friday }}");
+                fecha=  "{{ friday }}";
+                return "Viernes";
+            }
+        }
+        function setHours(cotaI, cotaS){
+            var day=getDay(cotaI,cotaS);
+            var cI=cotaI;
+            var cS=cotaS;
+            if(day.localeCompare("Lunes")==0){
+
+            }
+            else if(day.localeCompare("Martes")==0){
+                cI=cotaI-18;
+                cS=cotaS-18;
+
+            }
+            else if(day.localeCompare("Miércoles")==0){
+                cI=cotaI-18-18;
+                cS=cotaS-18-18;
+            }
+            else if(day.localeCompare("Jueves")==0){
+                cI=cotaI-18-18-18;
+                cS=cotaS-18-18-18;
+            }
+            else if(day.localeCompare("Viernes")==0){
+                cI=cotaI-18-18-18-18;
+                cS=cotaS-18-18-18-18;
+            }
+            switch (cI){
+                case 1:
+                    hi= "9:00";
+                    break;
+                case 2:
+                     hi= "9:30";
+                     break;
+                case 3:
+                     hi= "10:00";
+                     break;
+                case 4:
+                     hi= "10:30";
+                     break;
+                case 5:
+                     hi= "11:00";
+                     break;
+                case 6:
+                     hi= "11:30";
+                     break;
+                case 7:
+                     hi= "12:00";
+                     break;
+                case 8:
+                     hi= "12:30";
+                     break;
+                case 9:
+                     hi= "13:00";
+                     break;
+                case 10:
+                     hi= "13:30";
+                     break;
+                case 11:
+                     hi= "14:00";
+                     break;
+                case 12:
+                     hi= "14:30";
+                     break;
+                case 13:
+                     hi= "15:00";
+                     break;
+                case 14:
+                     hi= "15:30";
+                     break;
+                case 15:
+                     hi= "16:00";
+                     break;
+                case 16:
+                     hi= "16:30";
+                     break;
+                case 17:
+                     hi= "17:00";
+                     break;
+                case 18:
+                     hi= "17:30";
+                     break;
+            }
+            switch (cS){
+                case 1:
+                    hf= "9:30";
+                     break;
+                case 2:
+                    hf= "10:00";
+                     break;
+                case 3:
+                    hf= "10:30";
+                     break;
+                case 4:
+                    hf= "11:00";
+                     break;
+                case 5:
+                    hf= "11:30";
+                     break;
+                case 6:
+                    hf= "12:00";
+                     break;
+                case 7:
+                    hf= "12:30";
+                     break;
+                case 8:
+                    hf= "13:00";
+                     break;
+                case 9:
+                    hf= "13:30";
+                     break;
+                case 10:
+                    hf= "14:00";
+                     break;
+                case 11:
+                    hf= "14:30";
+                     break;
+                case 12:
+                    hf= "15:00";
+                     break;
+                case 13:
+                    hf= "15:30";
+                     break;
+                case 14:
+                    hf= "16:00";
+                     break;
+                case 15:
+                    hf= "16:30";
+                     break;
+                case 16:
+                    hf= "17:00";
+                     break;
+                case 17:
+                    hf= "17:30";
+                     break;
+                case 18:
+                    hf= "18:00";
+                     break;
+            }
+
+        }
+        $(function(){
+            $('.selectable').selectable({
+                filter: 'tr',
+                start: function () {
+                    popdown();
+                },
+                selecting:function(){
+                    $('table,.ui-selected').removeClass('ui-selected')
+                },
+                stop: function() {
+                    var cotaInf= $('table tr').index($('.ui-selected')[0]) +1;
+                    var cotaSup= $('table tr').index($('.ui-selected')[$('.ui-selected').length -1]) +1;
+                    var dia = getDay(cotaInf, cotaSup);
+                    setHours(cotaInf,cotaSup);
+                    var result = $("#select-result").empty();
+                    $(".ui-selected",this).each(function(){
+                        var index = $('table tr').index(this);
+                        result.append("#" + (index+1));
+
+                    });
+                    var horai= document.getElementById("hora_inicial");
+                    horai.value= hi;
+                    var horaf= document.getElementById("hora_final");
+                    horaf.value= hf;
+                    var date= document.getElementById("fecha");
+                    date.value= fecha;
+
+                    var horas= $("#horas").empty();
+                    horas.append("Desde: "+ hi + " hasta " + hf); //horas que aparecen en formulario
+                    result.append(dia + " desde "+hi +" hasta " +hf); //texto que aparece arriba de la grilla
+                    popup();
+                    }
+            });
+        });
+        function popup() {
+            var popup = document.getElementById("popup");
+            popup.style.display="block";
+        }
+        function popdown() {
+             var popup = document.getElementById("popup");
+            popup.style.display="none";
+        }
+        window.onload= function () {
+            var x =document.getElementById("close");
+            console.log(x);
+            x.onclick = function(){
+                popdown();
+            }
+        }
+
+
+    </script>
+</head>
+<!--<p id="feedback">
+<span>You've selected:</span> <span id="select-result">none</span>.
+</p>-->
+<div class="row justify-content-center" >
+    <div class="popup" style="align:center" id="popup">
+        <form class="popupform" method="post" action="{% url 'space_request' %}">
+            {% csrf_token%}
+            <span class="close" id="close">&times;</span>
+            <div class="row justify-content-center align-items-center" style="height: 80px; margin:0%">
+                <h3>Reserva de espacios</h3>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px">
+                <select class="form-control" id="select_espacio" name="espacio" style="width: 70%">
+                    {% for s in espacios %}
+                        <option> {{s.name}} </option><!--poner nombre del espacio aqui-->
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px">
+                <span>Estás reservando para:
+                    <b id="day">
+                    </b>
+                </span>
+            </div>
+            <div class="row justify-content-center align-items-center" style="height: 80px" id="horas">
+
+            </div>
+            <input type="hidden" name="hora_inicial" id="hora_inicial">
+            <input type="hidden" name="hora_final" id="hora_final">
+            <input type="hidden" name="fecha" id="fecha">
+            <div class="row justify-content-center align-items-center"style="height: 80px">
+                <input type="submit" value="Reservar">
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="cd-schedule loading" >
+	<div class="timeline" id="timeline" >
+		<ul style="height: 383.8px">
+			<li><span>09:00</span></li>
+			<li><span>09:30</span></li>
+			<li><span>10:00</span></li>
+			<li><span>10:30</span></li>
+			<li><span>11:00</span></li>
+			<li><span>11:30</span></li>
+			<li><span>12:00</span></li>
+			<li><span>12:30</span></li>
+			<li><span>13:00</span></li>
+			<li><span>13:30</span></li>
+			<li><span>14:00</span></li>
+			<li><span>14:30</span></li>
+			<li><span>15:00</span></li>
+			<li><span>15:30</span></li>
+			<li><span>16:00</span></li>
+			<li><span>16:30</span></li>
+			<li><span>17:00</span></li>
+			<li><span>17:30</span></li>
+			<li><span>18:00</span></li>
+		</ul>
+	</div> <!-- .timeline -->
+	<div id="line-container" class="line-container">
+	<div id="line" class="clock"></div><div class="message" id="message"></div>
+		</div>
+	<div class="events" id="events" style="height: 100%">
+		<ul style="height: 100%">
+			<li class="events-group" style="height: 100%">
+				<div class="top-info"><span id="lunes">Lunes</span></div>
+
+
+                    <ul style="height: 100%" >
+                          <table class="selectable" id= "lunes" style="height: 100%;width: 100%">
+                            <tr style="height: 20.19px"><td id="lunes1"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes2"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes3"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes4"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes5"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes6"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes7"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes8"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes9"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes10"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes11"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes12"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes13"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes14"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes15"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes16"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes17"><span></span></td></tr>
+                            <tr style="height: 20.19px"><td id="lunes18"><span></span></td></tr>
+
+                          </table>
+                        {% for r in reservations.0 %}
+
+                        <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+                            <a href="">
+                                <em class="event-name">{{r.0}}</em>
+                            </a>
+                        </li>
+
+                        {% endfor%}
+
+                    </ul>
+			</li>
+
+			<li class="events-group" style="height: 100%">
+				<div class="top-info"><span>Martes</span></div>
+
+				<ul style="height: 100%">
+                    <table class="selectable" id= "martes" style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="ma1"><span></span></td></tr>
+                            <tr  style="height: 20px"><td id="ma2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="ma3"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma4"><span></span></td></tr>
+                            <tr style="height: 20px">     <td id="ma5"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma6"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma7"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma8"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma9"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="ma10"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma11"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma12"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma13"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma14"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma15"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma16"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma17"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="ma18"><span></span></td></tr>
+
+                    </table>
+					{% for r in reservations.1 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group" style="height: 100%">
+				<div class="top-info"><span>Miércoles</span></div>
+
+				<ul style="height: 100%">
+                <table  class="selectable" id=miercoles style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="mi1"><span></span></td></tr>
+                            <tr  style="height: 20px">    <td id="mi2"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="mi3"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi4"><span></span></td></tr>
+                            <tr style="height: 20px">     <td id="mi5"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi6"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi7"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi8"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi9"><span></span></td></tr>
+                            <tr style="height: 20px">   <td id="mi10"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi11"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi12"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi13"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi14"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi15"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi16"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi17"><span></span></td></tr>
+                            <tr style="height: 20px">    <td id="mi18"><span></span></td></tr>
+                    </table>
+					{% for r in reservations.2 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" >
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group" style="height: 100%">
+				<div class="top-info"><span>Jueves</span></div>
+
+				<ul style="height: 100%">
+                <table class="selectable" id=jueves style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="j1"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j3"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j4"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j5"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j6"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j7"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j8"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j9"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j10"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j11"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j12"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j13"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j14"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j15"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j16"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j17"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="j18"><span></span></td></tr>
+                          </table>
+					{% for r in reservations.3 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group" style="height: 100%">
+				<div class="top-info"><span>Viernes</span></div>
+
+				<ul style="height: 100%">
+                <table class="selectable" id=viernes style="height: 100%;width: 100%">
+                            <tr style="height: 20px"><td id="v1"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v2"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v3"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v4"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v5"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v6"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v7"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v8"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v9"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v10"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v11"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v12"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v13"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v14"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v15"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v16"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v17"><span></span></td></tr>
+                            <tr style="height: 20px"><td id="v18"><span></span></td></tr>
+                          </table>
+					{% for r in reservations.4 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+		</ul>
+
+	</div>
+
+
+
+	<div class="week-select" id="week-select">
+		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 600px; font-size: 18px">
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit" name="date"   value="{{controls.0}}" style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-double-left"></i></button>
+			</form>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                   {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit" name="date"   value="{{controls.1}}"style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-left"></i></button>
+			</form>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit"name="date"value="{{controls.2}}"style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height:20px"><i class="fas fa-angle-right"></i></button>
+			</form>
+			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+                {% csrf_token%}
+                {% for s in espacios %}
+                    {% if s.name in filtros %}
+                        <input type="hidden" name="{{ s.name }}" value="{{ s.name }}">
+                    {% else %}
+                        <input type="hidden" name="{{ s.name }}" value=False>
+                    {% endif %}
+                {% endfor %}
+				<button type="submit"name="date"value="{{controls.3}}" style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height: 20px"><i class="fas fa-angle-double-right"></i></button>
+			</form>
+		</div>
+
+	</div>
+
+
+
+	<div class="event-modal">
+		<header class="header">
+			<div class="content">
+				<span class="event-date"></span>
+				<h3 class="event-name"></h3>
+			</div>
+
+			<div class="header-bg"></div>
+		</header>
+
+		<div class="body">
+			<div class="event-info"></div>
+			<div class="body-bg"></div>
+		</div>
+
+		<a href="#0" class="close">Close</a>
+	</div>
+
+	<div class="cover-layer"></div>
+
+</div> <!-- .cd-schedule -->
+
+
+
+
+
