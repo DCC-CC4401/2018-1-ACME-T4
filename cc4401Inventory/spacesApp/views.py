@@ -3,24 +3,62 @@ from django.contrib.auth.decorators import login_required
 from spacesApp.models import Space
 from reservationsApp.models import Reservation
 from django.db import models
-from datetime import datetime, timedelta
+from django.utils.timezone import localtime
+import datetime
 
 import random, os
 import pytz
 from django.contrib import messages
 
 
-
 @login_required
-def space_data(request, space_id):
+def space_data(request, space_id, date=None):
+
+    if date:
+        current_date = date
+        current_week = datetime.datetime.strptime(current_date,"%Y-%m-%d").date().isocalendar()[1]
+    else:
+        try:
+            current_week = datetime.datetime.strptime(request.GET["date"], "%Y-%m-%d").date().isocalendar()[1]
+            current_date = request.GET["date"]
+        except:
+            current_week = datetime.date.today().isocalendar()[1]
+            current_date = datetime.date.today().strftime("%Y-%m-%d")
+
+    reservations = Reservation.objects.filter(starting_date_time__week = current_week, state__in = ['P','A'])
+    colores = {'A': 'rgba(0,153,0,0.7)',
+               'P': 'rgba(51,51,204,0.7)'}
+
+    res_list = []
+    for i in range(5):
+        res_list.append(list())
+    for r in reservations:
+        reserv = []
+        reserv.append(r.space.name)
+        reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))
+        reserv.append(localtime(r.ending_date_time).strftime("%H:%M"))
+        reserv.append(colores[r.state])
+        res_list[r.starting_date_time.isocalendar()[2]-1].append(reserv)
+
+    move_controls = list()
+    move_controls.append((datetime.datetime.strptime(current_date,"%Y-%m-%d")+datetime.timedelta(weeks=-4)).strftime("%Y-%m-%d"))
+    move_controls.append((datetime.datetime.strptime(current_date,"%Y-%m-%d")+datetime.timedelta(weeks=-1)).strftime("%Y-%m-%d"))
+    move_controls.append((datetime.datetime.strptime(current_date,"%Y-%m-%d")+datetime.timedelta(weeks=1)).strftime("%Y-%m-%d"))
+    move_controls.append((datetime.datetime.strptime(current_date,"%Y-%m-%d")+datetime.timedelta(weeks=4)).strftime("%Y-%m-%d"))
+
+    delta = (datetime.datetime.strptime(current_date, "%Y-%m-%d").isocalendar()[2])-1
+    monday = ((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime("%d/%m/%Y"))
+
     try:
         space = Space.objects.get(id=space_id)
 
         last_reservations = Reservation.objects.filter(space=space,
-                                         ending_date_time__lt=datetime.now(tz=pytz.utc)
-                                         ).order_by('-ending_date_time')[:10]
+                                                       ending_date_time__lt=datetime.datetime.now(
+                                                           tz=pytz.timezone('Etc/GMT-3'))
+                                                       ).order_by('-ending_date_time')[:10]
 
         reservation_list = list()
+        print(last_reservations)
         for reservation in last_reservations:
 
             starting_day = reservation.starting_date_time.strftime("%d-%m-%Y")
@@ -29,20 +67,24 @@ def space_data(request, space_id):
             ending_hour = reservation.ending_date_time.strftime("%H:%M")
 
             if starting_day == ending_day:
-                reservation_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                reservation_list.append(starting_day + " " + starting_hour + " a " + ending_hour)
             else:
-                reservation_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
-
+                reservation_list.append(starting_day + ", " + starting_hour + " a " + ending_day + ", " + ending_hour)
 
         context = {
             'space': space,
-            'last_reservations': reservation_list
+            'last_reservations': reservation_list,
+            'reservations': res_list,
+            'current_date': current_date,
+            'controls': move_controls,
+            'actual_monday': monday
         }
 
         return render(request, 'space_data.html', context)
     except Exception as e:
         print(e)
         return redirect('/')
+
 
 def verificar_horario_habil(horario):
     if horario.isocalendar()[2] > 5:
@@ -56,7 +98,7 @@ def verificar_horario_habil(horario):
 @login_required
 def space_request(request):
     if request.method == 'POST':
-        space = Space.objects.get(id = request.POST['space_id'])
+        space = Space.objects.get(id=request.POST['space_id'])
 
         if request.user.enabled:
             try:
@@ -74,8 +116,9 @@ def space_request(request):
                 elif not verificar_horario_habil(start_date_time) and not verificar_horario_habil(end_date_time):
                     messages.warning(request, 'Los pedidos deben ser hechos en horario hábil.')
                 else:
-                    reservation = Reservation(space=space, starting_date_time=start_date_time, ending_date_time=end_date_time,
-                                user=request.user)
+                    reservation = Reservation(space=space, starting_date_time=start_date_time,
+                                              ending_date_time=end_date_time,
+                                              user=request.user)
                     reservation.save()
                     messages.success(request, 'Pedido realizado con éxito')
             except Exception as e:
@@ -101,29 +144,25 @@ def space_data_admin(request, space_id):
             return redirect('/')
 
 
-
 @login_required
 def space_edit_name(request, space_id):
-
     if request.method == "POST":
         a = Space.objects.get(id=space_id)
         a.name = request.POST["name"]
         a.save()
-    return redirect('/space/'+str(space_id)+'/edit')
+    return redirect('/space/' + str(space_id) + '/edit')
 
 
 @login_required
 def space_edit_image(request, space_id):
-
     if request.method == "POST":
         u_file = request.FILES["image"]
         extension = os.path.splitext(u_file.name)[1]
         a = Space.objects.get(id=space_id)
-        a.image.save(str(space_id)+"_image"+extension, u_file)
+        a.image.save(str(space_id) + "_image" + extension, u_file)
         a.save()
 
     return redirect('/space/' + str(space_id) + '/edit')
-
 
 
 @login_required
