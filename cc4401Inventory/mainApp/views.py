@@ -9,10 +9,12 @@ from django.utils.timezone import localtime
 from articlesApp.models import Article
 from reservationsApp.models import Reservation
 from spacesApp.models import Space
-
+from adminApp.views import *
 
 @login_required
 def landing_articles(request):
+    if request.user.is_staff:
+        return user_panel(request)
     context = {}
     return render(request, 'articulos.html', context)
 
