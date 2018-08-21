@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 
-from django.db import models
-from django.core.mail import send_mail
-from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
+from django.core.mail import send_mail
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -86,10 +86,15 @@ class Action(models.Model):
         ('R', 'Rechazado'),
         ('P', 'Pendiente')
     )
-    starting_date_time = models.DateTimeField()
-    ending_date_time = models.DateTimeField()
+    TYPES = (
+        ('A', 'Artículo'),
+        ('S', 'Espacio')
+    )
+    starting_date_time = models.DateTimeField(null=True)
+    ending_date_time = models.DateTimeField(null=True)
     state = models.CharField('Estado', choices=STATES, max_length=1, default='P')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    type = models.CharField('Tipo', choices=TYPES, max_length=1, default='A')
 
     class Meta:
         abstract = True

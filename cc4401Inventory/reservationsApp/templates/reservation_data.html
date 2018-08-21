@@ -1,0 +1,49 @@
+
+{% extends 'application_layout.html' %}
+
+{% load static %}
+
+{% block title %}
+  Ficha de reserva
+{% endblock %}
+
+
+{% block body %}
+<h2>Información sobre la reserva</h2>
+<div class="card">
+  <div class="card-header reservation-space-title">Espacio</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.space.name }}</p>
+  </div>
+  <div class="card-header reservation-user-title">Usuario</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.user.get_full_name }}</p>
+  </div>
+  <div class="card-header reservation-state-title">Estado</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.get_state_display }}</p>
+  </div>
+  <div class="card-header reservation-description-title">Descripción</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.space.description }}</p>
+  </div>
+  <div class="card-header reservation-datetime-title">Fecha y hora de inicio</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.starting_date_time }}</p>
+  </div>
+  <div class="card-header reservation-datetime-title">Fecha y hora de término</div>
+  <div class="card-body">
+    <p class="card-text">{{ reservation.ending_date_time }}</p>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <form method="post" action="{% url 'cancel_reservation' %}">
+          {% csrf_token %}
+          <button class="delete-button" name="reservation" value="{{ reservation.id }}">Cancelar Reserva</button>
+      </form>
+  </div>
+</div>
+
+{% endblock %}
