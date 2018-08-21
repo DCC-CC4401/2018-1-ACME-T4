@@ -1,14 +1,13 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from articlesApp.models import Article
-from loansApp.models import Loan
-from django.db import models
+import os
 from datetime import datetime, timedelta
 
-import random, os
 import pytz
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
+from articlesApp.models import Article
+from loansApp.models import Loan
 
 
 @login_required
@@ -30,10 +29,9 @@ def article_data(request, article_id):
                 ending_hour = loan.ending_date_time.strftime("%H:%M")
 
                 if starting_day == ending_day:
-                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                    loan_list.append(starting_day + " " + starting_hour + " a " + ending_hour)
                 else:
-                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
-
+                    loan_list.append(starting_day + ", " + starting_hour + " a " + ending_day + ", " + ending_hour)
 
             context = {
                 'article': article,
@@ -61,10 +59,9 @@ def article_data(request, article_id):
                 ending_hour = loan.ending_date_time.strftime("%H:%M")
 
                 if starting_day == ending_day:
-                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                    loan_list.append(starting_day + " " + starting_hour + " a " + ending_hour)
                 else:
-                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
-
+                    loan_list.append(starting_day + ", " + starting_hour + " a " + ending_day + ", " + ending_hour)
 
             context = {
                 'article': article,
@@ -75,6 +72,7 @@ def article_data(request, article_id):
         except Exception as e:
             print(e)
             return redirect('/')
+
 
 def verificar_horario_habil(horario):
     if horario.isocalendar()[2] > 5:
@@ -88,7 +86,7 @@ def verificar_horario_habil(horario):
 @login_required
 def article_request(request):
     if request.method == 'POST':
-        article = Article.objects.get(id = request.POST['article_id'])
+        article = Article.objects.get(id=request.POST['article_id'])
 
         if request.user.enabled:
             try:
@@ -107,7 +105,7 @@ def article_request(request):
                     messages.warning(request, 'Los pedidos deben ser hechos en horario hábil.')
                 else:
                     loan = Loan(article=article, starting_date_time=start_date_time, ending_date_time=end_date_time,
-                                user=request.user)
+                                user=request.user, type='A')
                     loan.save()
                     messages.success(request, 'Pedido realizado con éxito')
             except Exception as e:
@@ -133,29 +131,25 @@ def article_data_admin(request, article_id):
             return redirect('/')
 
 
-
 @login_required
 def article_edit_name(request, article_id):
-
     if request.method == "POST":
         a = Article.objects.get(id=article_id)
         a.name = request.POST["name"]
         a.save()
-    return redirect('/article/'+str(article_id)+'/edit')
+    return redirect('/article/' + str(article_id) + '/edit')
 
 
 @login_required
 def article_edit_image(request, article_id):
-
     if request.method == "POST":
         u_file = request.FILES["image"]
         extension = os.path.splitext(u_file.name)[1]
         a = Article.objects.get(id=article_id)
-        a.image.save(str(article_id)+"_image"+extension, u_file)
+        a.image.save(str(article_id) + "_image" + extension, u_file)
         a.save()
 
     return redirect('/article/' + str(article_id) + '/edit')
-
 
 
 @login_required

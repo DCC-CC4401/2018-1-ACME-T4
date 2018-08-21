@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
-from mainApp.models import User
-from django.contrib import messages
+import datetime
 
-from reservationsApp.models import Reservation
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 from loansApp.models import Loan
+from mainApp.models import User
+from reservationsApp.models import Reservation
 
 
 def login_view(request):
@@ -19,13 +20,19 @@ def login_view(request):
 
 # se llama cuando se envia el formulario de login
 def login_submit(request):
-
     username = request.POST['email']
     password = request.POST['password']
     user = authenticate(request, username=username, password=password)
     context = {'error_message': ''}
 
     if user is not None:
+        # Se rechazan reservas al quincho, estas caducan 24 horas antes de su fecha de inicio
+        query = Reservation.objects.filter(user=user, type='S', state='P', space__is_quincho=True)
+        for reservation in query:
+            if reservation.starting_date_time >= datetime.datetime.now() - datetime.timedelta(hours=24):
+                reservation.state = 'R'
+                reservation.save()
+
         if user.is_superuser:
             login(request, user)
             return redirect('/admin/')
@@ -47,7 +54,6 @@ def signup(request):
 
 # se llama cuando se manda el formulario de creacion de cuentas
 def signup_submit(request):
-
     context = {'error_message': '', }
 
     if request.method == 'POST':
@@ -57,14 +63,14 @@ def signup_submit(request):
         password = request.POST['password']
         rut = request.POST['RUT']
 
-        if User.objects.filter(email = email).exists():
+        if User.objects.filter(email=email).exists():
             messages.warning(request, 'Ya existe una cuenta con ese correo.')
             return redirect('/user/signup/')
-        elif User.objects.filter(rut = rut).exists():
+        elif User.objects.filter(rut=rut).exists():
             messages.warning(request, 'Ya existe una cuenta con ese rut')
             return redirect('/user/signup/')
         else:
-            user = User.objects.create_user(first_name=first_name, email=email, password=password, rut = rut)
+            user = User.objects.create_user(first_name=first_name, email=email, password=password, rut=rut)
             login(request, user)
             messages.success(request, 'Bienvenid@, ' + user.first_name + ' ya puedes comenzar a hacer reservas :)')
             if user.is_superuser:
@@ -82,8 +88,9 @@ def logout_view(request):
 def user_data(request, user_id):
     try:
         user = User.objects.get(id=user_id)
-        reservations = Reservation.objects.filter(user = user_id).order_by('-starting_date_time')[:10]
-        loans = Loan.objects.filter(user = user_id).order_by('-starting_date_time')[:10]
+        reservations = Reservation.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
+        loans = Loan.objects.filter(user=user_id).order_by('-starting_date_time')[:10]
+
         context = {
             'user': user,
             'reservations': reservations,
