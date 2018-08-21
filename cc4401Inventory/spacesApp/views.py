@@ -76,6 +76,7 @@ def space_data(request, space_id):
             print(e)
             return redirect('/')
 
+
 def verificar_horario_habil(horario):
     if horario.isocalendar()[2] > 5:
         return False

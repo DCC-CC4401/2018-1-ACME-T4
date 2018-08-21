@@ -50,6 +50,12 @@
 
         <div class = "col-md-5 offset-2">
             <h3 class="block-title">Solicitar reserva</h3>
+
+            {% include '_schedule_landing.html' %}
+
+
+
+            <!-- Formulario para reserva
             <form action="{% url  'space_request' %}" method="post" class="reservation-form">
                 {% csrf_token%}
                 <input type="hidden" name="space_id" value="{{ space.id }}">
@@ -91,7 +97,8 @@
                     <button type="submit" class = "btn btn-primary float-right"> Pedir </button>
                 </div>
             </form>
-
+            -->
+            <!-- Últimas reservas -->
             <div class = "row reservation-history-container">
                 <h3 class="block-title"> Historial de reservas</h3>
                 <div class="reservation-history">
