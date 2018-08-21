@@ -5,123 +5,126 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-<div class="row">
-  {% include '_sidebar.html' %}
-	<div class="col-md-10">
+  <div class="container">
     <div class="row">
-      <div class="col-md-6 offset-md-3 form-container">
-        <form>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
+      {% include '_sidebar.html' %}
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-6 offset-md-3 form-container">
+            <form>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
-            </div>
-            <input class="form-control" type="text" placeholder="Ingrese su busqueda">
-            <div class="input-group-append">
-              <button class="search-button btn btn-outline-secondary" type="submit">Buscar</button>
+                </div>
+                <input class="form-control" type="text" placeholder="Ingrese su busqueda">
+                <div class="input-group-append">
+                  <button class="search-button btn btn-outline-secondary" type="submit">Buscar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 admin-table-container">
+            <h1>Articulos</h1>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre del Articulo</th>
+                <th scope="col">Estado</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for article in articles %}
+                <tr>
+                  <td>{{ article.id }}</td>
+                  <td>{{ article.name }}</td>
+                  <td>{{ article.get_state_display }}</td>
+                  <td class="center-column">
+                    <a class="table-button" href="{% url 'article_data_admin' article.id %}"><i class="fas fa-edit"></i></a>
+                    <form action="{% url 'delete_item' %}" method="post" id="deleteitem">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary btn-sm" value="{{ article.id }}" name="itemid">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                    {#  <a class="table-button" href="#"><i class="fas fa-trash"></i></a>#}
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <div class="col-md-1">
+              <button type="button" class="btn btn-primary offset-md-9" data-toggle="modal" data-target="#exampleModal">
+                Agregar artículo
+              </button>
             </div>
           </div>
-        </form>
+          <div class="col-md-6 admin-table-container">
+            <h1>Espacios</h1>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre del Espacio</th>
+                <th scope="col">Estado</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for space in spaces %}
+                <tr>
+                  <td>{{ space.id }}</td>
+                  <td>{{ space.name }}</td>
+                  <td>{{ space.get_state_display }}</td>
+                  <td class="center-column">
+                    <a class="table-button" href="#"><i class="fas fa-edit"></i></a>
+                    <a class="table-button" href="#"><i class="fas fa-trash"></i></a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-6 admin-table-container">
-        <h1>Articulos</h1>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nombre del Articulo</th>
-            <th scope="col">Estado</th>
-            <th scope="col"></th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for article in articles %}
-          <tr>
-            <td>{{ article.id }}</td>
-            <td>{{ article.name }}</td>
-            <td>{{ article.state }}</td>
-            <td class="center-column">
-              <a class="table-button" href="{% url 'article_data_admin' article.id %}"><i class="fas fa-edit"></i></a>
-              <form action="{% url 'delete_item' %}" method="post" id="deleteitem">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-primary btn-sm" value="{{ article.id }}" name="itemid">
-                      <i class="fas fa-trash"></i>
-                  </button>
-              </form>
-              {#  <a class="table-button" href="#"><i class="fas fa-trash"></i></a>#}
-            </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-          <div class="col-md-1"><button type="button" class="btn btn-primary offset-md-9" data-toggle="modal" data-target="#exampleModal">
-          Agregar artículo
-          </button></div>
-      </div>
-      <div class="col-md-6 admin-table-container">
-        <h1>Espacios</h1>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nombre del Espacio</th>
-            <th scope="col">Estado</th>
-            <th scope="col"></th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for space in spaces %}
-          <tr>
-            <td>{{ space.id }}</td>
-            <td>{{ space.name }}</td>
-            <td>{{ space.get_state_display }}</td>
-            <td class="center-column">
-              <a class="table-button" href="#"><i class="fas fa-edit"></i></a>
-              <a class="table-button" href="#"><i class="fas fa-trash"></i></a>
-            </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar objeto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'create_item' %}" method="post" id="itemform" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="itemname">Nombre:</label>
+                <input type="text" class="form-control" id="itemname" name="itemname">
+              </div>
+              <div class="form-group">
+                <label for="itemdesc">Descripción:</label>
+                <textarea class="form-control" id="itemdesc" rows="3" name="itemdesc"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="itemimage">Imagen:</label>
+                <input type="file" class="form-control-file" id="itemimage" name="itemimage">
+              </div>
+              <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-     <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar objeto</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                  <form action="{% url 'create_item' %}" method="post" id="itemform" enctype="multipart/form-data">
-                    {% csrf_token %}
-                      <div class="form-group">
-                          <label for="itemname">Nombre:</label>
-                          <input type="text" class="form-control" id="itemname" name="itemname">
-                      </div>
-                      <div class="form-group">
-                          <label for="itemdesc">Descripción:</label>
-                          <textarea class="form-control" id="itemdesc" rows="3" name="itemdesc"></textarea>
-                      </div>
-                      <div class="form-group">
-                          <label for="itemimage">Imagen:</label>
-                          <input type="file" class="form-control-file" id="itemimage" name="itemimage">
-                      </div>
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                  </form>
-              </div>
-            </div>
-          </div>
-        </div>
-</div>
 {% endblock %}
