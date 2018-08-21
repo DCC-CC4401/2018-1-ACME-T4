@@ -262,48 +262,12 @@
 
 
     </script>
+<head>
+    <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
 </head>
-<!--<p id="feedback">
-<span>You've selected:</span> <span id="select-result">none</span>.
-</p>-->
-<div class="row justify-content-center" >
-    <div class="popup" style="align:center" id="popup">
-        <form class="popupform" method="post" action="{% url 'space_request' %}">
-            {% csrf_token%}
-            <span class="close" id="close">&times;</span>
-            <div class="row justify-content-center align-items-center" style="height: 80px; margin:0%">
-                <h3>Reserva de espacios</h3>
-            </div>
-            <div class="row justify-content-center align-items-center" style="height: 80px">
-                <select class="form-control" id="select_espacio" name="espacio" style="width: 70%">
-                    {% for s in espacios %}
-                        <option> {{s.name}} </option><!--poner nombre del espacio aqui-->
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="row justify-content-center align-items-center" style="height: 80px">
-                <span>Estás reservando para:
-                    <b id="day">
-                    </b>
-                </span>
-            </div>
-            <div class="row justify-content-center align-items-center" style="height: 80px" id="horas">
-
-            </div>
-            <input type="hidden" name="hora_inicial" id="hora_inicial">
-            <input type="hidden" name="hora_final" id="hora_final">
-            <input type="hidden" name="fecha" id="fecha">
-            <div class="row justify-content-center align-items-center"style="height: 80px">
-                <input type="submit" value="Reservar">
-            </div>
-        </form>
-
-    </div>
-</div>
-
-<div class="cd-schedule loading" >
-	<div class="timeline" id="timeline" >
-		<ul style="height: 383.8px">
+<div class="cd-schedule loading">
+	<div class="timeline" id="timeline">
+		<ul>
 			<li><span>09:00</span></li>
 			<li><span>09:30</span></li>
 			<li><span>10:00</span></li>
@@ -328,72 +292,30 @@
 	<div id="line-container" class="line-container">
 	<div id="line" class="clock"></div><div class="message" id="message"></div>
 		</div>
-	<div class="events" id="events" style="height: 100%">
-		<ul style="height: 100%">
-			<li class="events-group" style="height: 100%">
-				<div class="top-info"><span id="lunes">Lunes</span></div>
+	<div class="events" id="events">
+		<ul>
+			<li class="events-group">
+				<div class="top-info"><span>Lunes</span></div>
 
+				<ul>
+					{% for r in reservations.0 %}
 
-                    <ul style="height: 100%" >
-                          <table class="selectable" id= "lunes" style="height: 100%;width: 100%">
-                            <tr style="height: 20.19px"><td id="lunes1"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes2"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes3"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes4"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes5"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes6"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes7"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes8"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes9"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes10"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes11"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes12"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes13"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes14"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes15"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes16"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes17"><span></span></td></tr>
-                            <tr style="height: 20.19px"><td id="lunes18"><span></span></td></tr>
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
 
-                          </table>
-                        {% for r in reservations.0 %}
+					{% endfor%}
 
-                        <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
-                            <a href="">
-                                <em class="event-name">{{r.0}}</em>
-                            </a>
-                        </li>
-
-                        {% endfor%}
-
-                    </ul>
+				</ul>
 			</li>
 
-			<li class="events-group" style="height: 100%">
+			<li class="events-group">
 				<div class="top-info"><span>Martes</span></div>
 
-				<ul style="height: 100%">
-                    <table class="selectable" id= "martes" style="height: 100%;width: 100%">
-                            <tr style="height: 20px"><td id="ma1"><span></span></td></tr>
-                            <tr  style="height: 20px"><td id="ma2"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="ma3"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma4"><span></span></td></tr>
-                            <tr style="height: 20px">     <td id="ma5"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma6"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma7"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma8"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma9"><span></span></td></tr>
-                            <tr style="height: 20px">   <td id="ma10"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma11"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma12"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma13"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma14"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma15"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma16"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma17"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="ma18"><span></span></td></tr>
+				<ul>
 
-                    </table>
 					{% for r in reservations.1 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
@@ -406,30 +328,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group" style="height: 100%">
+			<li class="events-group">
 				<div class="top-info"><span>Miércoles</span></div>
 
-				<ul style="height: 100%">
-                <table  class="selectable" id=miercoles style="height: 100%;width: 100%">
-                            <tr style="height: 20px"><td id="mi1"><span></span></td></tr>
-                            <tr  style="height: 20px">    <td id="mi2"><span></span></td></tr>
-                            <tr style="height: 20px">   <td id="mi3"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi4"><span></span></td></tr>
-                            <tr style="height: 20px">     <td id="mi5"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi6"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi7"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi8"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi9"><span></span></td></tr>
-                            <tr style="height: 20px">   <td id="mi10"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi11"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi12"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi13"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi14"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi15"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi16"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi17"><span></span></td></tr>
-                            <tr style="height: 20px">    <td id="mi18"><span></span></td></tr>
-                    </table>
+				<ul>
 					{% for r in reservations.2 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" >
@@ -442,30 +344,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group" style="height: 100%">
+			<li class="events-group">
 				<div class="top-info"><span>Jueves</span></div>
 
-				<ul style="height: 100%">
-                <table class="selectable" id=jueves style="height: 100%;width: 100%">
-                            <tr style="height: 20px"><td id="j1"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j2"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j3"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j4"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j5"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j6"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j7"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j8"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j9"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j10"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j11"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j12"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j13"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j14"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j15"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j16"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j17"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="j18"><span></span></td></tr>
-                          </table>
+				<ul>
 					{% for r in reservations.3 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}">
@@ -478,30 +360,10 @@
 				</ul>
 			</li>
 
-			<li class="events-group" style="height: 100%">
+			<li class="events-group">
 				<div class="top-info"><span>Viernes</span></div>
 
-				<ul style="height: 100%">
-                <table class="selectable" id=viernes style="height: 100%;width: 100%">
-                            <tr style="height: 20px"><td id="v1"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v2"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v3"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v4"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v5"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v6"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v7"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v8"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v9"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v10"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v11"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v12"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v13"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v14"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v15"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v16"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v17"><span></span></td></tr>
-                            <tr style="height: 20px"><td id="v18"><span></span></td></tr>
-                          </table>
+				<ul>
 					{% for r in reservations.4 %}
 
 					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
@@ -537,21 +399,7 @@
 
 	</div>
 
-      <!--  <div class="row" style="width: 828px;margin-left:60px;position:absolute;top:432px;padding-top: 10px;padding-bottom: 10px">
-        <form action="{% url 'landing_spaces' %}" method="post" style="width:100%">
-        {% csrf_token%}
-        <div class="row"style="padding-bottom: 10px">
-            {% for s in espacios %}
-                <div class="col-3 " style="margin: 0%">
-                    <input type="hidden" name="{{ s.name }}" value=False>
-                    <input type="checkbox" id="espacio{{ s.id }}" name="{{ s.name }}" value="{{ s.name }}">
-                    <label for="espacio{{ s.id }}">{{ s.name }}</label>
-                </div>
-            {% endfor %}
-        </div>
-        <input type="submit" value="Filtrar">
-        </form>
-        </div>-->
+
 
 
 	<div class="event-modal">
