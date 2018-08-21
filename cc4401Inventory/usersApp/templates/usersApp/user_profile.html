@@ -92,7 +92,9 @@
 
                               {% if reservation.type == 'A' %}
                                 <div class="d-flex w-100 justify-content-between">
-                                  <h2 class="mb-1">{{ reservation.article.name }}</h2>
+                                  <h2 class="mb-1"><a
+                                          href="/article/{{ reservation.article.id }}">{{ reservation.article.name }}</a>
+                                  </h2>
                                   <medium><strong>{{ reservation.starting_date_time }}</strong></medium>
                                 </div>
                                 <medium class="text-muted">{{ reservation.get_state_display }}</medium>
@@ -113,7 +115,8 @@
                                 <p>{{ reservation.article.description }}</p>
                               {% elif reservation.type == 'S' %}
                                 <div class="d-flex w-100 justify-content-between">
-                                  <h2 class="mb-1">{{ reservation.space.name }}</h2>
+                                  <h2 class="mb-1"><a
+                                          href="/space/{{ reservation.space.id }}">{{ reservation.space.name }}</a></h2>
                                   <medium><strong>{{ reservation.starting_date_time }}</strong></medium>
                                 </div>
                                 <medium class="text-muted">{{ reservation.get_state_display }}</medium>
@@ -226,7 +229,7 @@
 
                           {% if loan.type == 'A' %}
                             <div class="d-flex w-100 justify-content-between">
-                              <h2 class="mb-1">{{ loan.article.name }}</h2>
+                              <h2 class="mb-1"><a href="/article/{{ loan.article.id }}">{{ loan.article.name }}</a></h2>
                               <medium><strong>{{ loan.starting_date_time }}</strong>
                               </medium>
                             </div>
@@ -251,7 +254,7 @@
                             <p>{{ loan.article.description }}</p>
                           {% elif loan.type == 'S' %}
                             <div class="d-flex w-100 justify-content-between">
-                              <h2 class="mb-1">{{ loan.space.name }}</h2>
+                              <h2 class="mb-1"><a href="/space/{{ loan.space.id }}">{{ loan.space.name }}</a></h2>
                               <medium><strong>{{ loan.starting_date_time }}</strong>
                               </medium>
                             </div>
