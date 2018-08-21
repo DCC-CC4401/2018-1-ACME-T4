@@ -52,7 +52,7 @@
 
               <!-- Checkbox, Nombre, Estado-->
               <div class="col-md-3">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                <div class="nav flex-column nav-pills" id="v-pills-reservation-tab" role="tablist"
                      aria-orientation="vertical">
                   <form method="post" action="{% url 'delete_reservation' %}">
                     {% csrf_token %}
@@ -80,15 +80,15 @@
 
               <!-- Contenido de cada objeto y/o espacio del resumen de reservas-->
               <div class="col-md-7 offset-1">
-                <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-content" id="v-pills-reservation-tabContent">
                   <div class="row">
                     {% for reservation in reservations %}
                       <div class="col-md-6">
                         <div class="card mt-4">
                           <div class="card-body">
-                            <div class="tab-pane fade show active" id="v-pills-{{ reservation.pk }}"
+                            <div class="tab-pane fade show active" id="v-pills-reservation-{{ reservation.pk }}"
                                  role="tabpanel"
-                                 aria-labelledby="v-pills-{{ reservation.pk }}-tab">
+                                 aria-labelledby="v-pills-reservation-{{ reservation.pk }}-tab">
 
                               {% if reservation.type == 'A' %}
                                 <div class="d-flex w-100 justify-content-between">
@@ -185,41 +185,44 @@
 
               <!-- Nombre, Estado-->
               <div class="col-lg-3">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                     aria-orientation="vertical">
+                <ul class="nav nav-pills flex-column" id="v-pills-loan-tab" role="tablist"
+                    aria-orientation="vertical">
 
                   {% for loan in loans %}
 
                     <!-- Tener seleccionado la primera casilla por default-->
-
-                    <a class="nav-link {% if forloop.counter0 == 0 %} active {% endif %}
+                    <li class="nav-item">
+                      <a class="nav-link {% if forloop.counter0 == 0 %} active {% endif %}
                                          d-flex justify-content-between align-items-center"
-                       id="v-pills-{{ loan.pk }}-tab" data-toggle="pill"
-                       href="#v-pills-{{ loan.pk }}"
-                       role="tab" aria-controls="v-pills-{{ loan.pk }}" aria-selected="false">
-                      {% if loan.type == 'A' %}
-                        {{ loan.article.name }}
-                      {% elif loan.type == 'S' %}
-                        {{ loan.space.name }}
-                      {% endif %}<span
-                            class="badge badge-pill badge-light">{{ loan.get_state_display }}</span></a>
+                         id="v-pills-loan-{{ loan.pk }}-tab" data-toggle="pill"
+                         href="#v-pills-loan-{{ loan.pk }}"
+                         role="tab" aria-controls="v-pills-loan-{{ loan.pk }}"
+                         aria-selected="{% if forloop.counter0 == 0 %}true{% else %}false{% endif %}">
+                        {% if loan.type == 'A' %}
+                          {{ loan.article.name }}
+                        {% elif loan.type == 'S' %}
+                          {{ loan.space.name }}
+                        {% endif %}<span
+                              class=" badge badge-pill badge-light">{{ loan.get_state_display }}</span></a>
+                    </li>
+
                   {% endfor %}
-                </div>
+                </ul>
               </div>
 
               <!-- Contenido de cada objeto y/o espacio del resumen de reservas-->
               <div class="col-lg-9">
                 <div class="card mt-4">
                   <div class="card-body">
-                    <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-content" id="v-pills-loan-tabContent">
 
                       {% for loan in loans %}
 
-                        <div class="tab-pane fade show {% if forloop.counter0 == 0 %}
-                                                    active {% endif %}"
-                             id="v-pills-{{ loan.pk }}"
+                        <div class="tab-pane fade {% if forloop.counter0 == 0 %}
+                                                    show active {% endif %}"
+                             id="v-pills-loan-{{ loan.pk }}"
                              role="tabpanel"
-                             aria-labelledby="v-pills-{{ loan.pk }}-tab">
+                             aria-labelledby="v-pills-loan-{{ loan.pk }}-tab">
 
                           {% if loan.type == 'A' %}
                             <div class="d-flex w-100 justify-content-between">
@@ -309,7 +312,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
 
           {% else %}
@@ -319,4 +321,7 @@
       </div>
     </div>
   </div>
+  <script>
+
+  </script>
 {% endblock %}

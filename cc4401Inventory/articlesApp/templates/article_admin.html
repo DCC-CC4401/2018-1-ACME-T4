@@ -1,4 +1,3 @@
-
 {% extends 'application_layout.html' %}
 
 {% load static %}
@@ -16,22 +15,26 @@
       <div class="row">
         <h1 class="article-name">
           {{ article.name }}
-        {% if article.state == "D" %}
-            <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
+          {% if article.state == "D" %}
+            <span class="badge badge-pill badge-success"><i
+                    class="fas fa-chevron-left"></i> {{ article.get_state_display }}</span>
           {% elif article.state == "P" %}
-            <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
+            <span class="badge badge-pill badge-primary"><i
+                    class="fas fa-chevron-left"></i> {{ article.get_state_display }}</span>
           {% elif article.state == "L" %}
-            <span class="badge badge-pill badge-danger"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
+            <span class="badge badge-pill badge-danger"><i
+                    class="fas fa-chevron-left"></i> {{ article.get_state_display }}</span>
           {% elif article.state == "R" %}
-            <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
+            <span class="badge badge-pill badge-warning"><i
+                    class="fas fa-chevron-left"></i> {{ article.get_state_display }}</span>
           {% endif %}
-         </h1>
+        </h1>
       </div>
-        {% if article.image %}
-            <img src= " {% static article.image.url %}" class="img-fluid" alt="Foto" style="height: 400px" />
-        {% else %}
-            <img class="card-img-top" src="{% static 'img/items/default_article.jpg' %}" alt="Card image cap">
-        {% endif %}
+      {% if article.image %}
+        <img src=" {% static article.image.url %}" class="img-fluid" alt="Foto" style="height: 400px"/>
+      {% else %}
+        <img class="card-img-top" src="{% static 'img/items/default_article.jpg' %}" alt="Card image cap">
+      {% endif %}
 
       <div class="card">
         <div class="card-header article-description-title">Descripción</div>
@@ -41,21 +44,18 @@
       </div>
     </div>
 
-    <div class = "col-md-5 offset-2">
-                <div class="col-4 ml-auto">
-                    <a class="btn btn-primary" href="{{article.id}}/edit" role="button">Modificar</a>
-                </div>
-          <h3 class="block-title"> Historial de reservas</h3>
-            <div class="reservation-history">
-                <ul>
-                    {% for elemento in last_loans %}
-                        <li>{{ elemento }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+    <div class="col-md-5 offset-2">
+      <div class="col-4 ml-auto">
+        <a class="btn btn-primary" href="{{ article.id }}/edit" role="button">Modificar</a>
+      </div>
+      <h3 class="block-title"> Historial de reservas</h3>
+      <div class="reservation-history">
+        <ul>
+          {% for elemento in last_loans %}
+            <li>{{ elemento }}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-
   </div>
-</div>
 {% endblock %}

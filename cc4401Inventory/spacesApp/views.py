@@ -29,8 +29,8 @@ def space_data(request, space_id, date=None):
             space = Space.objects.get(id=space_id)
 
             last_loans = Reservation.objects.filter(space=space,
-                                             ending_date_time__lt=datetime.datetime.now(tz=pytz.utc)
-                                             ).order_by('-ending_date_time')[:10]
+                                                    ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                                    ).order_by('-ending_date_time')[:10]
 
             loan_list = list()
             for loan in last_loans:
@@ -41,9 +41,9 @@ def space_data(request, space_id, date=None):
                 ending_hour = loan.ending_date_time.strftime("%H:%M")
 
                 if starting_day == ending_day:
-                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                    loan_list.append(starting_day + " " + starting_hour + " a " + ending_hour)
                 else:
-                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
+                    loan_list.append(starting_day + ", " + starting_hour + " a " + ending_day + ", " + ending_hour)
 
             move_controls = list()
             move_controls.append(
@@ -116,8 +116,8 @@ def space_data(request, space_id, date=None):
             space = Space.objects.get(id=space_id)
 
             last_loans = Reservation.objects.filter(space=space,
-                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
-                                             ).order_by('-ending_date_time')[:10]
+                                                    ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                                    ).order_by('-ending_date_time')[:10]
 
             loan_list = list()
             for loan in last_loans:
@@ -128,10 +128,9 @@ def space_data(request, space_id, date=None):
                 ending_hour = loan.ending_date_time.strftime("%H:%M")
 
                 if starting_day == ending_day:
-                    loan_list.append(starting_day+" "+starting_hour+" a "+ending_hour)
+                    loan_list.append(starting_day + " " + starting_hour + " a " + ending_hour)
                 else:
-                    loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
-
+                    loan_list.append(starting_day + ", " + starting_hour + " a " + ending_day + ", " + ending_hour)
 
             context = {
                 'space': space,
@@ -156,7 +155,7 @@ def verificar_horario_habil(horario):
 @login_required
 def space_request(request):
     if request.method == 'POST':
-        space = Space.objects.get(id = request.POST['space_id'])
+        space = Space.objects.get(id=request.POST['space_id'])
 
         if request.user.enabled:
             try:
@@ -174,8 +173,9 @@ def space_request(request):
                 elif not verificar_horario_habil(start_date_time) and not verificar_horario_habil(end_date_time):
                     messages.warning(request, 'Los pedidos deben ser hechos en horario hábil.')
                 else:
-                    reservation = Reservation(space=space, starting_date_time=start_date_time, ending_date_time=end_date_time,
-                                user=request.user)
+                    reservation = Reservation(space=space, starting_date_time=start_date_time,
+                                              ending_date_time=end_date_time,
+                                              user=request.user, type='S')
                     reservation.save()
                     messages.success(request, 'Pedido realizado con éxito')
             except Exception as e:
@@ -201,29 +201,25 @@ def space_data_admin(request, space_id):
             return redirect('/')
 
 
-
 @login_required
 def space_edit_name(request, space_id):
-
     if request.method == "POST":
         a = Space.objects.get(id=space_id)
         a.name = request.POST["name"]
         a.save()
-    return redirect('/space/'+str(space_id)+'/edit')
+    return redirect('/space/' + str(space_id) + '/edit')
 
 
 @login_required
 def space_edit_image(request, space_id):
-
     if request.method == "POST":
         u_file = request.FILES["image"]
         extension = os.path.splitext(u_file.name)[1]
         a = Space.objects.get(id=space_id)
-        a.image.save(str(space_id)+"_image"+extension, u_file)
+        a.image.save(str(space_id) + "_image" + extension, u_file)
         a.save()
 
     return redirect('/space/' + str(space_id) + '/edit')
-
 
 
 @login_required
@@ -234,6 +230,7 @@ def space_edit_description(request, space_id):
         a.save()
 
     return redirect('/space/' + str(space_id) + '/edit')
+
 
 @login_required
 def space_edit_capacity(request, space_id):

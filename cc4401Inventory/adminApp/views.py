@@ -123,6 +123,10 @@ def modify_reservations(request):
             for reservation in reservations:
                 reservation.state = 'A'
                 reservation.save()
+                loan = Loan(user=reservation.user, article=reservation.article,
+                            space=reservation.space, starting_date_time=reservation.starting_date_time,
+                            ending_date_time=reservation.ending_date_time, type=reservation.type)
+                loan.save()
         else:
             for reservation in reservations:
                 reservation.state = 'R'
@@ -156,6 +160,7 @@ def changeloans(request):
         loansid = request.POST.getlist('loans')
         for loanid in loansid:
             loan = Loan.objects.get(id=loanid)
-            loan.article.state = newstate
+            if loan.type == 'A':
+                loan.article.state = newstate
             loan.article.save()
         return redirect('/admin/actions-panel')
