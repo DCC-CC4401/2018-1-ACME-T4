@@ -10,3 +10,6 @@ class Space(Item):
     )
     state = models.CharField(max_length=1, choices=STATES)
     capacity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
