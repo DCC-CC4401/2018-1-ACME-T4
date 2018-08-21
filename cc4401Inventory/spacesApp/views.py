@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from spacesApp.models import Space
 from reservationsApp.models import Reservation
 from django.db import models
-from datetime import datetime, timedelta
+import datetime
+from django.utils.timezone import localtime
 
 import random, os
 import pytz
@@ -12,13 +13,23 @@ from django.contrib import messages
 
 
 @login_required
-def space_data(request, space_id):
+def space_data(request, space_id, date=None):
+    if date:
+        current_date = date
+        current_week = datetime.datetime.strptime(current_date, "%Y-%m-%d").date().isocalendar()[1]
+    else:
+        try:
+            current_week = datetime.datetime.strptime(request.POST["date"], "%Y-%m-%d").date().isocalendar()[1]
+            current_date = request.POST["date"]
+        except:
+            current_week = datetime.date.today().isocalendar()[1]
+            current_date = datetime.date.today().strftime("%Y-%m-%d")
     if not request.user.is_staff:
         try:
             space = Space.objects.get(id=space_id)
 
             last_loans = Reservation.objects.filter(space=space,
-                                             ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                             ending_date_time__lt=datetime.datetime.now(tz=pytz.utc)
                                              ).order_by('-ending_date_time')[:10]
 
             loan_list = list()
@@ -34,8 +45,64 @@ def space_data(request, space_id):
                 else:
                     loan_list.append(starting_day + ", " + starting_hour + " a " +ending_day + ", " +ending_hour)
 
+            move_controls = list()
+            move_controls.append(
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") + datetime.timedelta(weeks=-4)).strftime(
+                    "%Y-%m-%d"))
+            move_controls.append(
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") + datetime.timedelta(weeks=-1)).strftime(
+                    "%Y-%m-%d"))
+            move_controls.append(
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") + datetime.timedelta(weeks=1)).strftime(
+                    "%Y-%m-%d"))
+            move_controls.append(
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") + datetime.timedelta(weeks=4)).strftime(
+                    "%Y-%m-%d"))
 
+            delta = (datetime.datetime.strptime(current_date, "%Y-%m-%d").isocalendar()[2]) - 1
+            monday = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime(
+                    "%d/%m/%Y"))
+            lunes = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime(
+                    "%d/%m/%Y"))
+            martes = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta - 1)).strftime(
+                    "%d/%m/%Y"))
+            miercoles = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta - 2)).strftime(
+                    "%d/%m/%Y"))
+            jueves = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta - 3)).strftime(
+                    "%d/%m/%Y"))
+            viernes = (
+                (datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta - 4)).strftime(
+                    "%d/%m/%Y"))
+            reservations = Reservation.objects.filter(starting_date_time__week=current_week, state__in=['P', 'A'], space=space)
+            colores = {'A': 'rgba(0,153,0,0.7)',
+                       'P': 'rgba(51,51,204,0.7)'}
+            res_list = []
+            for i in range(5):
+                res_list.append(list())
+            for r in reservations:
+                if r.type == 'A':
+                    continue
+                reserv = []
+                reserv.append(r.space.name)
+                reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))
+                reserv.append(localtime(r.ending_date_time).strftime("%H:%M"))
+                reserv.append(colores[r.state])
+                res_list[r.starting_date_time.isocalendar()[2] - 1].append(reserv)
             context = {
+               'reservations': res_list,
+               'current_date': current_date,
+               'controls': move_controls,
+               'actual_monday': monday,
+               'monday': lunes,
+               'tuesday': martes,
+               'wednesday': miercoles,
+               'thursday': jueves,
+               'friday': viernes,
                 'space': space,
                 'last_loans': loan_list
             }

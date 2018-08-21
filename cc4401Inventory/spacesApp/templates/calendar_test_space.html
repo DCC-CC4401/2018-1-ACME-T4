@@ -269,11 +269,7 @@
                 <h3>Reserva de espacios</h3>
             </div>
             <div class="row justify-content-center align-items-center" style="height: 80px">
-                <select class="form-control" id="select_espacio" name="espacio" style="width: 70%">
-                    {% for s in espacios %}
-                        <option> {{s.name}} </option><!--poner nombre del espacio aqui-->
-                    {% endfor %}
-                </select>
+                <input type="text" readonly name="espacio" value="{{ space.name }}">
             </div>
             <div class="row justify-content-center align-items-center" style="height: 80px">
                 <span>Estás reservando para:
@@ -515,7 +511,7 @@
 
 	<div class="week-select" id="week-select">
 		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 600px; font-size: 18px">
-			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+			<form action="{% url 'space_data' space.id %}" method="post" class="selectform">
                 {% csrf_token%}
                 {% for s in espacios %}
                     {% if s.name in filtros %}
@@ -526,7 +522,7 @@
                 {% endfor %}
 				<button type="submit" name="date"   value="{{controls.0}}" style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-double-left"></i></button>
 			</form>
-			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+			<form action="{% url 'space_data' space.id %}" method="post" class="selectform">
                 {% csrf_token%}
                 {% for s in espacios %}
                    {% if s.name in filtros %}
@@ -537,7 +533,7 @@
                 {% endfor %}
 				<button type="submit" name="date"   value="{{controls.1}}"style="color: rgba(123,123,123,0.95);background-color: #EAEAEA;height: 20px"><i class="fas fa-angle-left"></i></button>
 			</form>
-			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+			<form action="{% url 'space_data' space.id %}" method="post" class="selectform">
                 {% csrf_token%}
                 {% for s in espacios %}
                     {% if s.name in filtros %}
@@ -548,7 +544,7 @@
                 {% endfor %}
 				<button type="submit"name="date"value="{{controls.2}}"style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height:20px"><i class="fas fa-angle-right"></i></button>
 			</form>
-			<form action="{% url 'landing_spaces' %}" method="post" class="selectform">
+			<form action="{% url 'space_data' space.id %}" method="post" class="selectform">
                 {% csrf_token%}
                 {% for s in espacios %}
                     {% if s.name in filtros %}
@@ -559,7 +555,7 @@
                 {% endfor %}
 				<button type="submit"name="date"value="{{controls.3}}" style="color:rgba(123,123,123,0.95);background-color:#EAEAEA;height: 20px"><i class="fas fa-angle-double-right"></i></button>
 			</form>
-		</div>
+		</div>/
 
 	</div>
 
