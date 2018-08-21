@@ -29,7 +29,7 @@ def space_data(request, space_id, date=None):
             space = Space.objects.get(id=space_id)
 
             last_loans = Reservation.objects.filter(space=space,
-                                                    ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                                    ending_date_time__lt=datetime.datetime.now(tz=pytz.utc)
                                                     ).order_by('-ending_date_time')[:10]
 
             loan_list = list()
@@ -116,7 +116,7 @@ def space_data(request, space_id, date=None):
             space = Space.objects.get(id=space_id)
 
             last_loans = Reservation.objects.filter(space=space,
-                                                    ending_date_time__lt=datetime.now(tz=pytz.utc)
+                                                    ending_date_time__lt=datetime.datetime.now(tz=pytz.utc)
                                                     ).order_by('-ending_date_time')[:10]
 
             loan_list = list()
@@ -166,7 +166,7 @@ def space_request(request):
 
                 if start_date_time > end_date_time:
                     messages.warning(request, 'La reserva debe terminar después de iniciar.')
-                elif start_date_time < datetime.now() + timedelta(hours=1):
+                elif start_date_time < datetime.datetime.now() + datetime.timedelta(hours=1):
                     messages.warning(request, 'Los pedidos deben ser hechos al menos con una hora de anticipación.')
                 elif start_date_time.date() != end_date_time.date():
                     messages.warning(request, 'Los pedidos deben ser devueltos el mismo día que se entregan.')
