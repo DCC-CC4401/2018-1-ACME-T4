@@ -21,7 +21,7 @@ def modify_loans(request):
         try:
             user = request.user
             if loan.user == user:
-                if loan.state == 'A':
+                if loan.state == 'V':
                     loan.article.state = 'L'
                     loan.article.save()
             else:
